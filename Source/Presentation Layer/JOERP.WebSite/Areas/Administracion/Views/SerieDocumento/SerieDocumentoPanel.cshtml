@@ -1,0 +1,154 @@
+﻿@using JOERP.WebSite.Core.Extensiones
+@model JOERP.Business.Entity.SerieDocumento
+@{
+    ViewBag.Title = "Información de Serie de Documento";
+}
+  <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<div class="msgModel">
+    <div class="tips loading">
+        Por favor espere, procesando solicitud...
+    </div>
+    <div class="tips merror">
+    </div>
+    <div class="tips mexito">
+    </div>
+</div>
+<div class="MhiosysForm">
+    @using (Html.BeginForm(ViewData["Accion"].ToString(), "SerieDocumento", new { area = "Administracion" }, FormMethod.Post, new { id = "frmModel" }))
+    {
+        ViewContext.FormContext.ValidationSummaryId = "valSumModel";
+        Html.ValidationSummaryJQuery("Errores Encontrados", new Dictionary<string, object> { { "id", "valSumModel" }, { "class", "merror" } });
+
+        <fieldset class="fieldset-with-legend border-round">
+            <legend class="border-shadow">Información de Serie de Documento : </legend>
+            <table border="0" cellpadding="0" cellspacing="0" class="tablelayout">
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.TipoDocumento)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.TipoDocumento, new SelectList(Model.TipoDocumentos, "Id", "Nombre", Model.TipoDocumento))
+                        @Html.ValidationMessageFor(model => model.TipoDocumento)
+                    </td>
+                </tr>
+          
+              
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Serie)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Serie)
+                        @Html.ValidationMessageFor(model => model.Serie)
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.NumeroActual)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.NumeroActual)
+                        @Html.ValidationMessageFor(model => model.NumeroActual)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.NumeroInicio)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.NumeroInicio)
+                        @Html.ValidationMessageFor(model => model.NumeroInicio)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.NumeroFinal)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.NumeroFinal)
+                        @Html.ValidationMessageFor(model => model.NumeroFinal)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.HiddenFor(model => model.IdSerieDocumento)
+                        @Html.HiddenFor(model => model.FechaCreacion)
+                        @Html.HiddenFor(model => model.UsuarioCreacion)
+                        @Html.HiddenFor(model => model.FechaModificacion)
+                        @Html.HiddenFor(model => model.UsuarioModificacion)
+                    </td>
+                    <td colspan="3">
+                        <br />
+                        <input type="submit" value="Guardar" id="btnRegistrar" class="buttonConstellation" />
+                        <input type="reset" value="Limpiar" id="btnReset" class="buttonConstellation" />
+                        <input type="button" value="Regresar" id="btnCancel" onclick="Cancelar()" class="buttonConstellation" />
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    }
+</div>
+
+
+
+
+<script type="text/javascript">
+    var resetFrm = false;
+    $(document).ready(function () {
+      
+        $('#NumeroActual').numeric({ allow: "-" });
+        $('#NumeroInicio').numeric({ allow: "-" });
+        $('#NumeroFinal').numeric({ allow: "-" });
+
+        $(".msgModel .tips").hide();
+        $(".msgModel .merror, .msgModel .mexito, .msgModel .loading").css({ "border-top": "none" });
+        $("#frmModel .merror").css({ "border-top": "none", "border-left": "none", "border-right": "none" });
+        $('#btnRegistrar').bind("click", function (e) {
+
+            if (resetFrm)
+                $(".msgModel .tips").hide();
+
+            if ($("#frmModel").validate().form()) {
+                InicializarMsg();
+                $.post($("#frmModel").attr("action"), $("#frmModel").serialize(), function (response) {
+                    if (response.Success) {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .mexito").html(response.Message);
+                            JOERP.ShowElement(".msgModel .mexito");
+                            resetFrm = true;
+                            $('#btnRegistrar').hide("slow");
+                            $('#btnReset').hide("slow");
+                        });
+                    } else {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .merror").html(response.Message);
+                            JOERP.ShowElement(".msgModel .merror");
+                        });
+                        resetFrm = true;
+                    }
+                });
+            }
+            e.preventDefault();
+        });
+    });
+
+    function InicializarMsg() {
+        if ($(".msgModel .merror").is(":visible")) {
+            $(".msgModel .merror").slideUp(200, function () {
+                JOERP.ShowElement(".msgModel .loading");
+            });
+        } else
+            JOERP.ShowElement(".msgModel .loading");
+    }
+
+    function Cancelar() {
+
+        var sgrid = $("#tabla")[0];
+        sgrid.clearToolbar();
+        $('#tabla').trigger('reloadGrid');
+        $('#listado').show();
+        $('#informacion').hide();
+    }
+
+</script>

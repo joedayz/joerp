@@ -1,0 +1,126 @@
+﻿@{
+    ViewBag.Title = "Valorizaciones";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<table style="width: 1100px; padding: 10px; height: 90%; min-height: 400px;" class="MhiosysForm">
+    <tr>
+        <td>
+            <fieldset class="fieldset-with-legend border-round">
+                <legend class="border-shadow">Filtros de búsqueda : </legend>
+                <table cellspacing="10" style="margin: 20px;">
+                    <tr>
+                        <td>
+                            Nro. Serie:
+                        </td>
+                        <td>
+                            <select id="cmbNumeroSerie" class="short">
+                            </select>
+                        </td>
+                        <td>
+                            &nbsp;&nbsp;
+                        </td>
+                        <td>
+                            Nro. Documento:
+                        </td>
+                        <td>
+                            <select id="cmbNumeroDocumento" class="small">
+                            </select>
+                        </td>
+                        <td colspan="5" style="text-align: center">
+                            <input type="hidden" id="txtIdProducto" />
+                            <input type="button" value="Buscar" id="btnBuscar" class="buttonConstellation" />
+                            <input type="button" value="Exportar Excel" id="btnExportar" class="buttonConstellation" />
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <br />
+            <table id="tablaValorizacion">
+            </table>
+        </td>
+    </tr>
+</table>
+<script type="text/javascript">
+
+    $(function () {
+
+        CargarSeriesDocumento();
+
+        $("#cmbNumeroSerie").change(function () {
+            CargarNumeroDocumento();
+        });
+        CargarNumeroDocumento();
+
+        CrearGrilla('#tablaValorizacion');
+
+        $('#btnBuscar').bind("click", function (e) {
+            ListarReporte();
+        });
+    });
+
+    function CargarSeriesDocumento() {
+        JOERP.LoadDropDownListItems('cmbNumeroSerie', '@Url.Action("CargarSerieDocumento", "Consultas", new { Area = "" })', { tipoDocumento: 50 });
+    }
+
+    function CargarNumeroDocumento() {
+        var serieDocumento = $("#cmbNumeroSerie").val();
+        if (JOERP.ValidarEntero(serieDocumento)) {
+            JOERP.LoadDropDownListItems('cmbNumeroDocumento', '@Url.Action("CargarNumerosDocumentos", "Consultas", new { Area = "" })', { idSerieDocumento: serieDocumento, idOperacion: 11 });
+        }
+    }
+
+    function ListarReporte() {
+
+        $("#tablaValorizacion").jqGrid("clearGridData");
+
+        var url = '@Url.Action("ReporteValorizacion", "Reporte")';
+        var parametros = {
+            serie: $('#cmbNumeroSerie option:selected').text(),
+            numeroDoc: $('#cmbNumeroDocumento option:selected').text()
+        };
+
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+
+            $.each(resultado.Data, function (index, campo) {
+                jQuery("#tablaValorizacion").jqGrid('addRowData', campo.IdPresentacion, campo);
+            });
+
+        } else {
+            alert(resultado.Message);
+        }
+    }
+
+    function CrearGrilla(tabla) {
+        var columnas = ['IdTransaccion', 'Fecha', 'Producto', 'Presentación', 'Cantidad', 'Costo'];
+        var modelo = [
+            { name: 'IdTransaccion', index: 'IdTransaccion', hidden: true, align: 'center', key: true },
+            { name: 'FechaProceso', index: 'FechaProceso', align: 'center' },
+            { name: 'NombreProducto', index: 'NombreProducto', align: 'left', width: 200 },
+            { name: 'NombrePresentacion', index: 'NombrePresentacion', align: 'center', width: 80 },
+            { name: 'Cantidad', index: 'Cantidad', align: 'right', width: 80 },
+            { name: 'Costo', index: 'Costo', align: 'right', width: 80 },
+
+    ];
+        tableToGrid(tabla, {
+            colNames: columnas,
+            colModel: modelo,
+            width: 1100,
+            height: 'auto',
+            datatype: 'local',
+            cellsubmit: "clientArray",
+            rowNum: 2000,
+            pgbuttons: false,
+            viewrecords: true,
+            hidegrid: false
+        });
+        $(tabla).trigger('reloadGrid');
+    }
+    
+</script>

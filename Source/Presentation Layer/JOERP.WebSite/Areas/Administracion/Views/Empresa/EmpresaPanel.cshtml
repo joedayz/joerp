@@ -1,0 +1,260 @@
+﻿@using JOERP.WebSite.Core.Extensiones
+@model JOERP.Business.Entity.Empresa
+@{
+    ViewBag.Title = "Información de Empresa";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<div class="msgModel">
+    <div class="tips loading">
+        Por favor espere, procesando solicitud...
+    </div>
+    <div class="tips merror">
+    </div>
+    <div class="tips mexito">
+    </div>
+</div>
+<div class="MhiosysForm">
+    @using (Html.BeginForm(ViewData["Accion"].ToString(), "Empresa", new { area = "Administracion" }, FormMethod.Post, new { id = "frmModel" }))
+    {
+        ViewContext.FormContext.ValidationSummaryId = "valSumModel";
+        Html.ValidationSummaryJQuery("Errores Encontrados", new Dictionary<string, object> { { "id", "valSumModel" }, { "class", "merror" } });
+
+        <fieldset class="fieldset-with-legend border-round">
+            <legend class="border-shadow">Información de la Empresa : </legend>
+            <table border="0" cellpadding="0" cellspacing="0" class="tablelayout">
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.RazonSocial)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.RazonSocial)
+                        @Html.ValidationMessageFor(model => model.RazonSocial)
+                    </td>
+            @*    </tr>
+               <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.RUC)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.RUC)
+                        @Html.ValidationMessageFor(model => model.RUC)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Direccion)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Direccion)
+                        @Html.ValidationMessageFor(model => model.Direccion)
+                    </td>
+      @*          </tr>
+                 <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.CodigoPostal)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.CodigoPostal)
+                        @Html.ValidationMessageFor(model => model.CodigoPostal)
+                    </td>
+                </tr>
+                 <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.IdDepartamento)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.IdDepartamento, new SelectList(Model.Departamentos, "Id", "Nombre", Model.IdDepartamento))
+                        @Html.ValidationMessageFor(model => model.IdDepartamento)
+                    </td>
+              @*  </tr>
+                <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.IdProvincia)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.IdProvincia, new List<SelectListItem>())
+                        @Html.ValidationMessageFor(model => model.IdProvincia)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.IdUbigeo)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.IdUbigeo, new List<SelectListItem>())
+                        @Html.ValidationMessageFor(model => model.IdUbigeo)
+                    </td>
+                
+             @*   </tr>
+                <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.ActividadEconomica)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.ActividadEconomica, new SelectList(Model.Actividades, "Id", "Nombre", Model.ActividadEconomica))
+                        @Html.ValidationMessageFor(model => model.ActividadEconomica)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Telefono)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Telefono)
+                        @Html.ValidationMessageFor(model => model.Telefono)
+                    </td>
+                @*</tr>
+                <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.Celular)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Celular)
+                        @Html.ValidationMessageFor(model => model.Celular)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Fax)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Fax)
+                        @Html.ValidationMessageFor(model => model.Fax)
+                    </td>
+               @* </tr>
+                <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.PaginaWeb)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.PaginaWeb)
+                        @Html.ValidationMessageFor(model => model.PaginaWeb)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.CorreoElectronico)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.CorreoElectronico)
+                        @Html.ValidationMessageFor(model => model.CorreoElectronico)
+                    </td>
+            @*    </tr>
+                 <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.TipoContribuyente)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.TipoContribuyente, new SelectList(Model.Contribuyentes, "Id", "Nombre", Model.TipoContribuyente))
+                        @Html.ValidationMessageFor(model => model.TipoContribuyente)
+                    </td>
+                </tr>               
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Estado)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Estado, new SelectList(Model.Estados, "Id", "Nombre", Model.Estado))
+                        @Html.ValidationMessageFor(model => model.Estado)
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.HiddenFor(model => model.IdEmpresa)
+                         @Html.HiddenFor(model => model.EsPercepcion)
+                        @Html.HiddenFor(model => model.FechaCreacion)
+                        @Html.HiddenFor(model => model.UsuarioCreacion)
+                        @Html.HiddenFor(model => model.FechaModificacion)
+                        @Html.HiddenFor(model => model.UsuarioModificacion)
+                    </td>
+                    <td colspan="3" style="text-align: center">
+                        <br />
+                        <input type="submit" value="Guardar" id="btnRegistrar" class="buttonConstellation" />
+                        <input type="reset" value="Limpiar" id="btnReset" class="buttonConstellation" />
+                        <input type="button" value="Regresar" id="btnCancel" onclick="Cancelar()" class="buttonConstellation" />
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    }
+</div>
+
+
+
+
+<script type="text/javascript">
+    var resetFrm = false;
+    $(document).ready(function () {
+        $('#Telefono').numeric({ allow: "-,(,)" });
+         $('#Celular').numeric({ allow: "-,(,)" });
+         $('#Fax').numeric({ allow: "-,(,)" });
+         $('#RUC').numeric({ allow: "-,(,)" });
+        $("#RUC").maxlength({ max: 11, feedbackText: '' });
+        $("#IdDepartamento").change(function() {
+
+            JOERP.LoadDropDownListItems('IdProvincia', '@Url.Action("GetProvincias", "Ubigeo", new {area = "Administracion"})', { idDepartamento: $(this).val() });
+        });
+        JOERP.LoadDropDownListItems('IdProvincia', '@Url.Action("GetProvincias", "Ubigeo", new {area = "Administracion"})',{ idDepartamento: @Model.IdDepartamento },@Model.IdProvincia );
+
+            $("#IdProvincia").change(function() {
+                JOERP.LoadDropDownListItems('IdUbigeo', '@Url.Action("GetDistritos", "Ubigeo", new {area = "Administracion"})', { idDepartamento: $('#IdDepartamento').val(), idProvincia: $(this).val() });
+            });
+            JOERP.LoadDropDownListItems('IdUbigeo', '@Url.Action("GetDistritos", "Ubigeo", new {area = "Administracion"})', { idDepartamento: @Model.IdDepartamento , idProvincia: @Model.IdProvincia }, @Model.IdUbigeo );
+
+        
+        
+        $(".msgModel .tips").hide();
+        $(".msgModel .merror, .msgModel .mexito, .msgModel .loading").css({ "border-top": "none" });
+        $("#frmModel .merror").css({ "border-top": "none", "border-left": "none", "border-right": "none" });
+        
+        $('#btnRegistrar').bind("click", function (e) {
+
+            if (resetFrm)
+                $(".msgModel .tips").hide();
+
+            if ($("#frmModel").validate().form()) {
+                InicializarMsg();
+                $.post($("#frmModel").attr("action"), $("#frmModel").serialize(), function (response) {
+                    if (response.Success) {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .mexito").html(response.Message);
+                            JOERP.ShowElement(".msgModel .mexito");
+                            resetFrm = true;
+                            $('#btnRegistrar').hide("slow");
+                            $('#btnReset').hide("slow");
+                        });
+                    } else {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .merror").html(response.Message);
+                            JOERP.ShowElement(".msgModel .merror");
+                        });
+                        resetFrm = true;
+                    }
+                });
+            }
+            e.preventDefault();
+        });
+    });
+
+    function InicializarMsg() {
+        if ($(".msgModel .merror").is(":visible")) {
+            $(".msgModel .merror").slideUp(200, function () {
+                JOERP.ShowElement(".msgModel .loading");
+            });
+        } else
+            JOERP.ShowElement(".msgModel .loading");
+    }
+
+    function Cancelar() {
+
+        var sgrid = $("#tabla")[0];
+        sgrid.clearToolbar();
+        $('#tabla').trigger('reloadGrid');
+        $('#listado').show();
+        $('#informacion').hide();
+    }
+
+</script>
+

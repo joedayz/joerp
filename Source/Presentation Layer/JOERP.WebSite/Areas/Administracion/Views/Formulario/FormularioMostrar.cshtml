@@ -1,0 +1,97 @@
+﻿@model JOERP.Business.Entity.Formulario
+<div class="MhiosysForm">
+    <fieldset class="fieldset-with-legend border-round">
+        <legend class="border-shadow">Formulario : </legend>
+        <table border="0" cellpadding="0" cellspacing="0" class="tablelayout">
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.Nombre)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Nombre, new {@readonly = "readonly"})
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.Descripcion)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Descripcion, new {@readonly = "readonly"})
+                </td>
+            </tr>
+          
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.Assembly)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Assembly, new {@readonly = "readonly"})
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.Direccion)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Direccion, new {@readonly = "readonly"})
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.IdParent)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.IdParent, new {@readonly = "readonly"})
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.Nivel)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Nivel, new {@readonly = "readonly"})
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.IdModulo)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.IdModulo, new {@readonly = "readonly"})
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.IdOperacion)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.IdOperacion, new {@readonly = "readonly"})
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.Orden)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Orden, new {@readonly = "readonly"})
+                </td>
+            </tr>
+              <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.Estado)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.NombreEstado, new {@readonly = "readonly"})
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.HiddenFor(model => model.IdFormulario, new {@readonly = "readonly"})
+                </td>
+                <td>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</div>

@@ -1,0 +1,104 @@
+﻿@using JOERP.Business.Entity
+@using JOERP.Helpers
+@model IList<Usuario>
+
+<div class="msgModel">
+    <div class="tips loading">
+        Por favor espere, procesando solicitud...
+    </div>
+    <div class="tips merror">
+    </div> 
+    <div class="tips mexito">
+    </div>
+</div>
+<div class="MhiosysForm">
+    @using (Html.BeginForm("GuardarPermisos/" + ViewData["IdFormulario"], "PermisoUsuario", new { area = "Administracion" }, FormMethod.Post, new { id = "frmModel" }))
+    {
+        
+        <fieldset class="fieldset-with-legend border-round">
+            <legend class="border-shadow">Permisos por Usuario : </legend>
+             <table border="1" cellpadding="0" cellspacing="0" class="tablelayout">
+                <tr style="text-transform: uppercase; font-weight: bold; color: cornflowerblue; ">
+                    <th style="width: 120px; text-align: center;">
+                        Usuario
+                    </th>
+                    @foreach (var tipoPermiso in (List<Comun>)ViewData["TiposPermiso"])
+                    {
+                        <th style="width: 58px; text-align: center;">
+                            @tipoPermiso.Nombre
+                        </th>
+                    }
+                </tr>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td style="width: 120px; text-align: center;">
+                            @Html.LabelFor(model => Model[i].IdEmpleado, Model[i].Empleado.Usuario.Username)
+                            @Html.HiddenFor(model => Model[i].IdEmpleado)
+                        </td>
+                        @for (var k = 0; k < Model[i].Permisos.Count; k++)
+                        {
+                            
+                            <td style="width: 70px; text-align: center;">
+                                @Html.CheckBoxFor(model => Model[i].Permisos[k].Seleccionado)
+                                @Html.HiddenFor(model => Model[i].Permisos[k].IdTipoPermiso)
+                            </td>
+                        }
+                    </tr>
+                }
+            </table>
+            <div style="text-align: center">
+                <br />
+                
+                <input type="submit" value="Guardar" id="btnRegistrar" class="buttonConstellation" />
+                <br />
+                <br />
+            </div>
+        </fieldset>
+    }
+</div>
+<script type="text/javascript">
+    var resetFrm = false;
+    $(document).ready(function () {
+
+        $(".msgModel .tips").hide();
+        $(".msgModel .merror, .msgModel .mexito, .msgModel .loading").css({ "border-top": "none" });
+        $("#frmModel .merror").css({ "border-top": "none", "border-left": "none", "border-right": "none" });
+
+        $('#btnRegistrar').bind("click", function (e) {
+
+            if (resetFrm)
+                $(".msgModel .tips").hide();
+
+            if ($("#frmModel").validate().form()) {
+                InicializarMsg();
+                $.post($("#frmModel").attr("action"), $("#frmModel").serialize(), function (response) {
+                    if (response.Success) {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .mexito").html(response.Message);
+                            JOERP.ShowElement(".msgModel .mexito");
+                            resetFrm = true;
+                        });
+                    } else {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .merror").html(response.Message);
+                            JOERP.ShowElement(".msgModel .merror");
+                        });
+                        resetFrm = true;
+                    }
+                });
+            }
+            e.preventDefault();
+        });
+    });
+
+    function InicializarMsg() {
+        if ($(".msgModel .merror").is(":visible")) {
+            $(".msgModel .merror").slideUp(200, function () {
+                JOERP.ShowElement(".msgModel .loading");
+            });
+        } else
+            JOERP.ShowElement(".msgModel .loading");
+    }
+
+</script>

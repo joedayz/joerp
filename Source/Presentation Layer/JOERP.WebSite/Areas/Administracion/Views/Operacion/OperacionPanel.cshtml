@@ -1,0 +1,275 @@
+﻿@using JOERP.WebSite.Core.Extensiones
+@model JOERP.Business.Entity.Operacion
+@{
+    ViewBag.Title = "Información de Operación";
+}
+  <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<div class="msgModel">
+    <div class="tips loading">
+        Por favor espere, procesando solicitud...
+    </div>
+    <div class="tips merror">
+    </div>
+    <div class="tips mexito">
+    </div>
+</div>
+<div class="MhiosysForm">
+    @using (Html.BeginForm(ViewData["Accion"].ToString(), "Operacion", new { area = "Administracion" }, FormMethod.Post, new { id = "frmModel" }))
+    {
+        ViewContext.FormContext.ValidationSummaryId = "valSumModel";
+        Html.ValidationSummaryJQuery("Errores Encontrados", new Dictionary<string, object> { { "id", "valSumModel" }, { "class", "merror" } });
+
+        <fieldset class="fieldset-with-legend border-round">
+            <legend class="border-shadow">Información de Operación : </legend>
+            <table border="0" cellpadding="0" cellspacing="0" class="tablelayout">
+                 <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Codigo)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Codigo, new { @readonly = true })
+                        @Html.ValidationMessageFor(model => model.Codigo)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Nombre)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Nombre)
+                        @Html.ValidationMessageFor(model => model.Nombre)
+                    </td>
+               @* </tr>
+                <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.Descripcion)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Descripcion)
+                        @Html.ValidationMessageFor(model => model.Descripcion)
+                    </td>
+               @* </tr>
+                 <tr>*@
+                   
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.SignoStock)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.SignoStock, new SelectList(Model.Signos, "Id", "Id", Model.SignoStock))
+                        @Html.ValidationMessageFor(model => model.SignoStock)
+                    </td>
+                @*</tr>
+                <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.SignoCaja)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.SignoCaja, new SelectList(Model.Signos, "Id", "Id", Model.SignoCaja))
+                        @Html.ValidationMessageFor(model => model.SignoCaja)
+                    </td>
+                @*</tr>
+                <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.SignoContable)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.SignoContable, new SelectList(Model.Signos, "Id", "Id", Model.SignoContable))
+                        @Html.ValidationMessageFor(model => model.SignoContable)
+                    </td>
+                </tr>
+                <tr>
+                <td class="right">
+                        @Html.LabelFor(model => model.Estado)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Estado, new SelectList(Model.Estados, "Id", "Nombre", Model.Estado))
+                        @Html.ValidationMessageFor(model => model.Estado)
+                    </td>
+                    <td class="right">
+                        @Html.LabelFor(model => model.SignoCartera)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.SignoCartera, new SelectList(Model.Signos, "Id", "Id", Model.SignoCartera))
+                        @Html.ValidationMessageFor(model => model.SignoCartera)
+                    </td>
+               @* </tr>
+                <tr>*@
+                    <td class="right">
+                        @Html.LabelFor(model => model.RealizaAsiento)
+                    </td>
+                    <td>
+                       @Html.CheckBoxFor(model => model.RealizaAsiento, new { enabled = true })
+                    
+                        @Html.ValidationMessageFor(model => model.RealizaAsiento)
+                    </td>
+                @*</tr>
+               
+               
+                <tr>*@
+                    
+                </tr>
+              
+                <tr>
+                    <td>
+                        @Html.HiddenFor(model => model.IdOperacion)
+                        @Html.HiddenFor(model => model.FechaCreacion)
+                        @Html.HiddenFor(model => model.UsuarioCreacion)
+                        @Html.HiddenFor(model => model.FechaModificacion)
+                        @Html.HiddenFor(model => model.UsuarioModificacion)
+                    </td>
+                    <td colspan="3">
+                        <br />
+                        <input type="submit" value="Guardar" id="btnRegistrar" class="buttonConstellation" />
+                        <input type="reset" value="Limpiar" id="btnReset" class="buttonConstellation" />
+                        <input type="button" value="Regresar" id="btnCancel" onclick="Cancelar()" class="buttonConstellation" />
+                    </td>
+                </tr>
+            </table>
+            <div id="tabs">
+                <ul>
+                    <li><a href="#tabs-1">Documentos Relacionados</a></li>
+                </ul>
+                <div id="tabs-1">
+                       <div id="listadoDoc" style="padding: 10px; height: 90%; min-height: 400px;">
+                                    <table id="tablaDoc">
+                                    </table>
+                                    <div id="barraDoc">
+                                    </div>
+                                </div>
+                                <div id="informacionDoc" style="padding: 10px; display: none;">
+                                </div>
+                    
+                    <div id='dialog-alert' style="display: none">
+                    </div>
+                    <div id="dialog-delete" style="display: none;">
+                        Esta seguro de quitar el registro seleccionado?
+                    </div>    
+                </div>
+            </div>
+        </fieldset>
+    }
+</div>
+
+
+
+
+<script type="text/javascript">
+    var resetFrm = false;
+
+    $(document).ready(function () {
+
+        ListarDoc(); 
+        
+        $("#tabs").tabs();
+        $(".msgModel .tips").hide();
+        $(".msgModel .merror, .msgModel .mexito, .msgModel .loading").css({ "border-top": "none" });
+        $("#frmModel .merror").css({ "border-top": "none", "border-left": "none", "border-right": "none" });
+        $('#btnRegistrar').bind("click", function (e) {
+
+            if (resetFrm)
+                $(".msgModel .tips").hide();
+
+            if ($("#frmModel").validate().form()) {
+                InicializarMsg();
+                $.post($("#frmModel").attr("action"), $("#frmModel").serialize(), function (response) {
+                    if (response.Success) {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .mexito").html(response.Message);
+                            JOERP.ShowElement(".msgModel .mexito");
+                            resetFrm = true;
+                            $('#btnRegistrar').hide("slow");
+                            $('#btnReset').hide("slow");
+                        });
+                    } else {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .merror").html(response.Message);
+                            JOERP.ShowElement(".msgModel .merror");
+                        });
+                        resetFrm = true;
+                    }
+                });
+            }
+            e.preventDefault();
+        });
+    });
+
+    function InicializarMsg() {
+        if ($(".msgModel .merror").is(":visible")) {
+            $(".msgModel .merror").slideUp(200, function () {
+                JOERP.ShowElement(".msgModel .loading");
+            });
+        } else
+            JOERP.ShowElement(".msgModel .loading");
+    }
+
+    function Cancelar() {
+
+        var sgrid = $("#tabla")[0];
+        sgrid.clearToolbar();
+        $('#tabla').trigger('reloadGrid');
+        $('#listado').show();
+        $('#informacion').hide();
+    }
+    function ListarDoc() {
+
+        var grilla = 'tablaDoc';
+        var colNames = ['ID', 'Tipo de Documento', 'Orden', 'Posición', 'Estado'];
+        var colModels = [
+                { name: 'TipoDocumento', index: 'TipoDocumento', align: 'center', hidden: true, width: 40, search: false},
+                { name: 'Nombre', index: 'Nombre', align: 'center', search: false, stype: 'select', searchoptions: { dataUrl: '@Url.Action("TiposDocumentoHtml", "SerieDocumento", new { area = "Administracion" })', sopt: ['eq']}  },
+                { name: 'Orden', index: 'Orden', align: 'center', search: false },
+                { name: 'Posicion', index: 'Posicion', align: 'center', search: false},
+                { name: 'Estado', index: 'Estado', align: 'center', width: 50, stype: 'select', searchoptions: { sopt: ['eq'], value: '-1:Todo;1:Activo;0:Inactivo'}, search: false }
+
+        ];
+
+        var opciones = { nuevo: true, editar: true, eliminar: true, search: false, rules:true};
+
+        JOERP.GrillaCompleta(grilla, 'barraDoc', 'hfIdentificador', 'auto', 1000, 'Documentos Relacionados', '@Url.Action("ListarDocumentos", "Operacion", new { area = "Administracion" })?operacionID=' + @Model.IdOperacion, 'id', colNames, colModels, 'IdOperacion', opciones,NuevoDoc,EditarDoc,EliminarDoc);
+
+        $("#" + grilla).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+    }
+
+     function GetRules() {
+
+        var valor = @Model.IdOperacion;
+        var rules = [{ field: 'OperacionId', data: valor}];
+        return rules;
+    }
+    
+    function CrearDialogs() {
+        var arrayDialog = [{ name: "dialog-alert", height: 100, width: 280, title: "Alerta"}];
+        JOERP.CreateDialogs(arrayDialog);
+    }
+
+    function NuevoDoc() {
+        var url = '@Url.Action("CrearDocumento", "Operacion", new { area = "Administracion" })?idOperacion=' + @Model.IdOperacion;
+        JOERP.Operacion2(url, 'listadoDoc', 'informacionDoc');
+    }
+
+    function EditarDoc(rowkey) {
+        var url = '@Url.Action("ModificarDocumento", "Operacion", new { area = "Administracion" })?idOperacion='+@Model.IdOperacion + '&TipoDocumento=' + rowkey;
+        JOERP.Operacion2(url, 'listadoDoc', 'informacionDoc');
+    }
+
+    function  EliminarDoc(rowkey) {
+        var url = '@Url.Action("EliminarDocumento","Operacion", new {area = "Administracion"})?idOperacion='+@Model.IdOperacion + '&tipoDocumento=' + rowkey;
+        var parametros = { 
+            tipoDocumento: rowkey, 
+            idOperacion: @Model.IdOperacion
+        };
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+            $('#refresh_tablaDoc').trigger('click');
+            $('#informacionDoc').dialog("close");
+            $("#informacionDoc").html('');
+        } else {
+            alert(resultado.Message);
+        }
+
+        $('#dialog-delete').dialog("close");
+    }
+</script>

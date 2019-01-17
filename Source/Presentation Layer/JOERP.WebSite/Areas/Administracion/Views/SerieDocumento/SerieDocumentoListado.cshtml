@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "Series de Documento";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    <table id="tabla">
+    </table>
+    <div id="barra">
+    </div>
+</div>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<div id="infoDelete" style="display: none;">
+</div>
+ <div id="dialog-delete" style="display: none;">
+    Esta seguro de quitar el registro seleccionado?
+</div>
+<script type='text/javascript'>
+    var grilla = 'tabla';
+
+    $(document).ready(function () {
+        Listar();
+        CrearDialogs();
+
+        $('#infoDelete').dialog("destroy");
+        $('#infoDelete').dialog({
+            width: 'auto',
+            resizable: false,
+            modal: true,
+            autoOpen: false,
+            open: function (type, data) { $(this).parent().appendTo("form"); },
+            close: function () { }
+
+        });
+    });
+
+    function Listar() {
+        var colNames = ['ID', 'Tipo Documento', 'Serie', 'N° Actual', 'N° Inicial', 'N° Final','Fecha Creación'];
+        var colModels = [
+                { name: 'IdSerieDocumento', index: 'IdSerieDocumento', align: 'center', hidden: true, searchoptions: { sopt: ['eq']} },
+                { name: 'TipoDocumento', index: 'TipoDocumento', align: 'center', stype: 'select', searchoptions: { dataUrl: '@Url.Action("TiposDocumentoHtml", "SerieDocumento", new { area = "Administracion" })', sopt: ['eq']} },
+                { name: 'Serie', index: 'Serie', align: 'center', width: 50, searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'NumeroActual', index: 'NumeroActual', align: 'center', width: 50, searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'NumeroInicial', index: 'NumeroInicial', align: 'center', width: 50, searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'NumeroFinal', index: 'NumeroFinal', align: 'center', width: 50, searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'FechaCreacion', index: 'FechaCreacion', align: 'center', width: 60, searchoptions: { sopt: ['cn', 'bw']} }
+        ];
+
+        var opciones = { nuevo: true, editar: true, eliminar: true};
+
+        JOERP.Grilla(grilla, 'barra', 'hfIdentificador', 'auto', 1000, 'Mantenedor de Serie de Documentos', '@Url.Action("Listar", "SerieDocumento", new { area = "Administracion" })', 'id', colNames, colModels, 'IdSerieDocumento', opciones);
+
+        $("#" + grilla).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+    }
+
+    function CrearDialogs() {
+        var arrayDialog = [{ name: "dialog-alert", height: 100, width: 280, title: "Alerta"}];
+        JOERP.CreateDialogs(arrayDialog);
+    }
+
+    function Nuevo() {
+        var url = '@Url.Action("Crear", "SerieDocumento", new { area = "Administracion" })';
+        JOERP.Operacion(url);
+    }
+
+    function Editar(rowkey) {
+     
+        var url = '@Url.Action("Modificar", "SerieDocumento", new { area = "Administracion" })' + '/' + rowkey;
+        JOERP.Operacion(url);
+    }
+
+    function Eliminar(rowkey) {
+
+        var url = '@Url.Action("Eliminar", "SerieDocumento")';
+        var parametros = { id: rowkey };
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+            $('#tabla').trigger('reloadGrid');
+        } else {
+            $("#infoDelete").html(resultado.Message);
+            $('#infoDelete').dialog("open");
+        }
+
+        $('#dialog-delete').dialog("close");
+    }
+</script>

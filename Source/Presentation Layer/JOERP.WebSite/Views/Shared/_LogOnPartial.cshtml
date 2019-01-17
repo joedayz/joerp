@@ -1,0 +1,22 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <table style="float: right; min-width: 150px;">
+        <tr>
+            <td>
+                @User.Identity.Name
+            </td>
+            <td rowspan="3" align="center">
+                <img src="@Url.Content("~/Content/images/login_persona.png")">
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href='@Url.Action("LogOff", "Sesion", new { area = "" })' onclick="javascript:return confirm('¿Estás seguro de Salir del Sistema?'); ">CERRAR SESION</a>
+            </td>
+        </tr>
+    </table>
+}

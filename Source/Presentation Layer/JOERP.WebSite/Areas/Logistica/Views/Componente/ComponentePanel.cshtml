@@ -1,0 +1,255 @@
+﻿@model JOERP.Business.Entity.Producto
+<div class="msgModel">
+    <div class="tips loading">
+        Por favor espere, procesando solicitud...
+    </div>
+    <div class="tips merror">
+    </div>
+    <div class="tips mexito">
+    </div>
+</div>
+<div class="MhiosysForm">
+    @using (Html.BeginForm(ViewData["Accion"].ToString(), "Componente", new { area = "Logistica" }, FormMethod.Post, new { id = "frmModel" }))
+    {
+        <fieldset class="fieldset-with-legend border-round">
+            <legend class="border-shadow">Información del Producto : </legend>
+            <table border="0" cellpadding="0" cellspacing="0" class="tablelayout">
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Codigo)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Codigo, new { @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Codigo)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Nombre)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Nombre, new { @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Nombre)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Descripcion)
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.Descripcion, new { @class = "text-area", @disabled = "disabled", @rows = "2" })
+                        @Html.ValidationMessageFor(model => model.Descripcion)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <fieldset class="fieldset-with-legend border-round" style="padding: 5px;">
+                            <br />
+                            <table cellspacing="3">
+                                <tr>
+                                    <td>
+                                        Producto :
+                                    </td>
+                                    <td>
+                                        <input id="txtProducto" type="text" />
+                                        <input id="hidProducto" type="hidden" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Presentación :
+                                    </td>
+                                    <td>
+                                        <select id="cboPresentaciones">
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Cantidad :
+                                    </td>
+                                    <td>
+                                        <input id="txtCantidad" type="text" style="width: 70px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <input type="button" value="Agregar" id="btnAgregar" class="buttonConstellation" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table cellspacing="5">
+                            <thead class="ui-jqgrid-titlebar ui-widget-header" style="height: 25px;">
+                                <tr>
+                                    <th style="text-align: center; font-weight: bold; width: 100px;">
+                                        Código
+                                    </th>
+                                    <th style="text-align: center; font-weight: bold; width: 200px;">
+                                        Producto
+                                    </th>
+                                    <th style="text-align: center; font-weight: bold; width: 150px;">
+                                        Presentación
+                                    </th>
+                                    <th style="text-align: center; font-weight: bold; width: 10px;">
+                                        Cantidad
+                                    </th>
+                                    <th style="text-align: center; width: 70px;">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaComponentes">
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.HiddenFor(model => model.IdProducto)
+                    </td>
+                    <td>
+                        <br />
+                        <br />
+                        <input type="submit" value="Guardar" id="btnRegistrar" class="buttonConstellation" />
+                        <input type="button" value="Regresar" id="btnCancel" onclick="Cancelar()" class="buttonConstellation" />
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    }
+</div>
+<script type="text/javascript">
+    var resetFrm = false;
+
+    $(document).ready(function () {
+
+        CargarComponentes();
+
+        $("#txtProducto").autocomplete({
+            source: '@Url.Action("BuscarProducto", "Componente")',
+            minLength: 2,
+            select: function (event, ui) {
+                if (ui.item) {
+                    var idProducto = ui.item.id;
+                    var nombre = ui.item.value;
+                    $('#hidProducto').val(idProducto);
+                    $('#txtProducto').val(nombre);
+
+                    JOERP.LoadDropDownListItems('cboPresentaciones', '@Url.Action("ListarPresentciones", "Componente", new { area = "Logistica" })', { idProducto: ui.item.id });
+                }
+            }
+        });
+
+        $(".msgModel .tips").hide();
+        $(".msgModel .merror, .msgModel .mexito, .msgModel .loading").css({ "border-top": "none" });
+        $("#frmModel .merror").css({ "border-top": "none", "border-left": "none", "border-right": "none" });
+
+        $('#btnRegistrar').bind("click", function (e) {
+
+            if (resetFrm)
+                $(".msgModel .tips").hide();
+
+            if ($("#frmModel").validate().form()) {
+                InicializarMsg();
+                $.post($("#frmModel").attr("action"), $("#frmModel").serialize(), function (response) {
+                    if (response.Success) {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .mexito").html(response.Message);
+                            JOERP.ShowElement(".msgModel .mexito");
+                            resetFrm = true;
+                            $('#btnRegistrar').hide("slow");
+                        });
+                    } else {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .merror").html(response.Message);
+                            JOERP.ShowElement(".msgModel .merror");
+                        });
+                        resetFrm = true;
+                    }
+                });
+            }
+            e.preventDefault();
+        });
+
+        $('#btnAgregar').bind("click", function (e) {
+
+            var idProducto = $('#hidProducto').val();
+            var idPresentacion = $('#cboPresentaciones').val();
+            var cantidad = $('#txtCantidad').val();
+
+            var url = '@Url.Action("AgregarComponente", "Componente")';
+            var parametros = { idProducto: idProducto,
+                idPresentacion: idPresentacion,
+                cantidad: cantidad
+            };
+
+            JOERP.Ajax(url, parametros, false);
+            CargarComponentes();
+
+        });
+    });
+
+    function InicializarMsg() {
+
+        if ($(".msgModel .merror").is(":visible")) {
+            $(".msgModel .merror").slideUp(200, function () {
+                JOERP.ShowElement(".msgModel .loading");
+            });
+        }
+        else
+            JOERP.ShowElement(".msgModel .loading");
+    }
+
+    function Cancelar() {
+
+        var sgrid = $("#tabla")[0];
+        sgrid.clearToolbar();
+        $('#tabla').trigger('reloadGrid');
+        $('#listado').show();
+        $('#informacion').hide();
+    }
+
+    function CargarComponentes() {
+
+        var url = '@Url.Action("ListarComponentes", "Componente")';
+        var resultado = JOERP.Ajax(url, null, false);
+
+        $('#tablaComponentes').html('');
+
+        if (resultado == undefined) return;
+
+        $.each(resultado, function (i, item) {
+
+            var html = '<tr>';
+            html += '<td style="text-align: center">' + item.Codigo + '</td>';
+            html += '<td>' + item.Producto + '</td>';
+            html += '<td align="text-align: center">' + item.Presentacion + '</td>';
+            html += '<td align="text-align: center">' + item.Cantidad + '</td>';
+            html += '<td align="text-align: center"><a href="javascript:QuitarComponente(\'' + item.IdProductoComponente + '\');"><img src="@Url.Content("~/Content/crm/images/16_delete.gif")" /></a></td>';
+            html += '</tr>';
+
+            $('#tablaComponentes').append(html);
+        });
+    }
+
+    function QuitarComponente(idComponente) {
+
+        if (confirm("Esta seguro de quitar la asignación?")) {
+
+            var url = '@Url.Action("QuitarComponente", "Componente")';
+            var parametros = { idComponente: idComponente };
+            var resultado = JOERP.Ajax(url, parametros, false);
+
+            if (resultado.Success) {
+                CargarComponentes();
+            }
+        }
+    }
+
+</script>

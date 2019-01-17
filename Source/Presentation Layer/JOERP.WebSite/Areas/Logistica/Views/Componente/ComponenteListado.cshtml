@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Componentes";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    <table id="tabla">
+    </table>
+    <div id="barra">
+    </div>
+</div>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<script type='text/javascript'>
+    var grilla = 'tabla';
+
+    $(document).ready(function () {
+        Listar();
+        CrearDialogs();
+    });
+
+    function Listar() {
+        var colNames = ['ID', 'Código', 'Código Alterno', 'Nombre', 'Descripción'];
+        var colModels = [
+                { name: 'IdProducto', index: 'IdProducto', align: 'center', hidden: true, width: 40, searchoptions: { sopt: ['eq']} },
+                { name: 'Codigo', index: 'Codigo', align: 'center', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'CodigoAlterno', index: 'CodigoAlterno', align: 'center', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'Nombre', index: 'Nombre', align: 'center', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'Descripcion', index: 'Descripcion', align: 'center', stype: 'select', searchoptions: { sopt: ['cn', 'bw']} },
+        ];
+
+        var opciones = { nuevo: false, editar: true, eliminar: false, rules : true};
+
+        JOERP.Grilla(grilla, 'barra', 'hfIdentificador', 'auto', 1000, 'Mantenedor de Ofertas', ' @Url.Action("Listar", "Componente", new { area = "Logistica" })', 'id', colNames, colModels, 'IdProducto', opciones);
+
+        $("#" + grilla).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+    }
+
+      function GetRules() {
+
+        var valor = 3;
+        var rules = [{ field: 'TipoProducto', data: valor}];
+        return rules;
+    }
+    
+    function CrearDialogs() {
+        var arrayDialog = [{ name: "dialog-alert", height: 100, width: 280, title: "Alerta"}];
+        JOERP.CreateDialogs(arrayDialog);
+    }
+
+    function Editar(rowkey) {
+        var url = '@Url.Action("Modificar", "Componente", new { area = "Logistica" })' + '/' + rowkey;
+        JOERP.Operacion(url);
+    }
+</script>
+

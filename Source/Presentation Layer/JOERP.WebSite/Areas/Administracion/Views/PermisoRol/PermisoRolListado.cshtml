@@ -1,0 +1,82 @@
+﻿@using JOERP.Helpers
+@{
+    ViewBag.Title = "Permisos por Rol";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    <table style="width: 100%;">
+        <tbody>
+            <tr>
+                <td style="vertical-align: top; width: 30%;">
+                    <fieldset class="fieldset-with-legend border-round">
+                        <legend class="border-shadow">Formularios del Sistema : </legend>
+                        <div id="mainTree" style="padding: 10px 10px 10px 10px;">
+                        </div>
+                    </fieldset>
+                </td>
+                <td style="width: 50%; vertical-align: top">
+                    <div id="mostrarTree" style="padding-left: 20px;">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="detalleTree" style="padding-left: 20px;">
+    </div>
+</div>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<script type='text/javascript'>
+
+    $(document).ready(function () {
+        Listar();
+    });
+
+    function Listar() {
+        $('#mainTree').jstree({
+            "json_data": {
+                "ajax": {
+                    "url": '@Url.Action("GetTreeData", "Formulario", new { area = "Administracion" })',
+                    "type": "POST",
+                    "dataType": "json",
+                    "contentType": "application/json charset=utf-8"
+                }
+            },
+            "themes": {
+                "theme": "default",
+                "dots": false,
+                "icons": true,
+                "url": "@Utils.AbsoluteWebRoot/Content/treeView/default/style.css"
+            },
+            "plugins": ["themes", "json_data", "dnd", "ui", "crrm"]
+        });
+    }
+
+    $('#detalleTree').dialog({
+        autoOpen: false,
+        width: 500,
+        resizable: false,
+        modal: true,
+        closeOnEscape: false,
+        open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+    });
+
+    $("#mainTree").click(function () {
+        document.getElementById("mostrarTree").style.display = 'block';
+        var id = $("#mainTree").jstree('get_selected').attr('id');
+        var idModulo = $("#mainTree").jstree('get_selected').attr('rel');
+        if (idModulo != "0" && id != "0") {
+            $.ajax({
+                url: '@Url.Action("Mostrar", "PermisoRol", new { area = "Administracion" })' + '?id=' + id,
+                success: function (data) {
+                    $("#mostrarTree").html(data);
+                }
+            });
+        } else {
+            document.getElementById("mostrarTree").style.display = 'none';
+        }
+    });
+
+</script>

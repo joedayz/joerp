@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "TransporteListado";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    <table id="tabla">
+    </table>
+    <div id="barra">
+    </div>
+</div>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<script type='text/javascript'>
+    var grilla = 'tabla';
+
+    $(document).ready(function () {
+        Listar();
+        CrearDialogs();
+    });
+
+    function Listar() {
+        var colNames = ['ID', 'Nombre', 'Direccion', 'Telefono', 'Estado'];
+        var colModels = [
+          { name: 'IdEmpleado', index: 'IdEmpleado', width: 90, editable: false, align: 'center', searchoptions: { sopt: ['eq', 'lt', 'le', 'gt', 'ge']} }
+        , { name: 'FullName', index: 'FullName', width: 200, editable: true, align: 'center', sortable: true, search: true, searchoptions: { sopt: ['bw', 'bn']} }
+        , { name: 'Direccion', index: 'Direccion', width: 300, editable: true, align: 'center', sortable: false, search: true }
+        , { name: 'Telefono', index: 'Telefono', width: 300, editable: true, align: 'center', sortable: false, search: true }
+        , { name: 'NombreEstado', index: 'Estado', width: 100, editable: false, align: 'center', sortable: false, search: true, stype: 'select', searchoptions: { sopt: ['eq'], value: '-1:Todo;1:Activo;0:Inactivo'} }
+        ];
+
+        var opciones = { nuevo: true, editar: true, eliminar: false, rules:true};
+
+        JOERP.Grilla(grilla, 'barra', 'hfIdentificador', 'auto', 1000, 'Mantenedor de Transportes', ' @Url.Action("Listar", "Transporte", new { area = "Logistica" })', 'id', colNames, colModels, 'IdPersona', opciones);
+
+        $("#" + grilla).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+    }
+
+    function GetRules() {
+
+        var valor = 6;
+        var rules = [{ field: 'IdFuncion', data: valor}];
+        return rules;
+    }
+    
+    function CrearDialogs() {
+        var arrayDialog = [{ name: "dialog-alert", height: 100, width: 280, title: "Alerta"}];
+        JOERP.CreateDialogs(arrayDialog);
+    }
+
+    function Nuevo() {
+
+        var url = '@Url.Action("Crear", "Transporte", new { area = "Logistica" })';
+        JOERP.Operacion(url);
+    }
+
+    function Editar(rowkey) {
+        var url = '@Url.Action("Modificar", "Transporte", new { area = "Logistica" })' + '/' + rowkey;
+        JOERP.Operacion(url);
+    }
+</script>

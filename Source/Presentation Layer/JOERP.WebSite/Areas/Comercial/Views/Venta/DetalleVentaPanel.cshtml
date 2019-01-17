@@ -1,0 +1,468 @@
+﻿@model JOERP.Business.Entity.MovimientoProducto
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<div class="msgModelD">
+    <div class="tips loading">
+        Por favor espere, procesando solicitud...
+    </div>
+    <div class="tips merror">
+    </div>
+    <div class="tips mexito">
+    </div>
+</div>
+<div class="MhiosysForm">
+    @using (Html.BeginForm(ViewData["Accion"].ToString(), "Venta", new { area = "Comercial" }, FormMethod.Post, new { id = "frmModelDetalle" }))
+    {
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.CodigoProducto)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.CodigoProducto, new { @class = "short" })
+                    @Html.ValidationMessageFor(model => model.CodigoProducto)
+
+                    @Html.LabelFor(model=>model.CodigoAlternoProducto)
+
+                    @Html.TextBoxFor(model=>model.CodigoAlternoProducto, new {@class="short"})
+                    @Html.ValidationMessageFor(model=>model.CodigoAlternoProducto)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.NombreProducto, new { @class = "medium" })
+                    @Html.ValidationMessageFor(model => model.NombreProducto)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.IdPresentacion)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.DropDownListFor(model => model.IdPresentacion, new List<SelectListItem>(), new { @class = "normal" })
+                    @Html.ValidationMessageFor(model => model.IdPresentacion)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.PrecioBase)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.PrecioBase, new { @class = "short", @onblur = "javascript:CalcularTotal();" })
+                    @Html.ValidationMessageFor(model => model.PrecioBase)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.Cantidad)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.Cantidad, new { @class = "short", @onblur = "javascript:CalcularTotal();" })
+                    @Html.ValidationMessageFor(model => model.Cantidad)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.MontoDescuento)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.MontoDescuento, new { @class = "short", @onblur = "javascript:CalcularPorcentajeDescuento();" })
+                    @Html.ValidationMessageFor(model => model.MontoDescuento)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.PorcentajeDescuento)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.PorcentajeDescuento, new { @class = "short", @onblur = "javascript:CalcularMontoDescuento();" })
+                    @Html.ValidationMessageFor(model => model.PorcentajeDescuento)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    SubTotal Parcial :
+                </td>
+                <td>
+                    <input type="text" id="txtSubTotalParcial" class="short" readonly="readonly"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.MontoDescuento2)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.MontoDescuento2, new { @class = "short", @onblur = "javascript:CalcularPorcentajeDescuento2();" })
+                    @Html.ValidationMessageFor(model => model.MontoDescuento2)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.PorcentajeDescuento2)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.PorcentajeDescuento2, new { @class = "short", @onblur = "javascript:CalcularMontoDescuento2();" })
+                    @Html.ValidationMessageFor(model => model.PorcentajeDescuento2)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.PrecioNeto)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.PrecioNeto, new { @class = "short", @disabled = "disabled" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <div id="detalleLotes" style="display: none; margin-top: 10px;">
+                        <table style="width: 390px; margin-left: auto; margin-right: auto;">
+                            <thead>
+                                <tr class="ui-jqgrid-titlebar ui-widget-header" style="height: 25px;">
+                                    <th style="width: 40px;">
+                                    </th>
+                                    <th style="width: 100px;">
+                                        Nro. Lote
+                                    </th>
+                                    <th style="width: 110px;">
+                                        Fecha Venc.
+                                    </th>
+                                    <th style="width: 110px;">
+                                        Cantidad
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="5"><hr/></td>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaDetalleLotes">
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center" colspan="2">
+                    <br />
+                    @Html.HiddenFor(model => model.IdProducto)
+                    @Html.HiddenFor(model => model.IdMovimientoProducto)
+                    @Html.HiddenFor(model=>model.TipoClasificacion)
+                    <input type="hidden" id="hddTipoProducto"/>
+                    <input type="submit" value="Agregar" id="btnRegistrarDetalle" class="buttonConstellation" />
+                    <input type="button" value="Regresar" id="btnCancelDetalle" class="buttonConstellation"
+                        onclick="CancelarDetalle()" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+<script type="text/javascript">
+
+    var resetFrmDetalle = false;
+
+    $(document).ready(function () {
+
+        $("#NombreProducto").autocomplete({
+            source: '@Url.Action("BuscarProductoAutocompletar", "Consultas", new { area = "" })',
+            minLength: 4,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProducto(ui.item);
+                }
+            }
+        });
+
+        $("#CodigoProducto").autocomplete({
+            source: '@Url.Action("BuscarProductoAutocompletarByCodigo", "Consultas", new { area = "" })',
+            minLength: 4,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProducto(ui.item);
+                }
+            }
+        });
+
+        $("#CodigoAlternoProducto").autocomplete({
+            source: '@Url.Action("BuscarProductoAutocompletarByCodigoAlterno", "Consultas", new { area = "" })',
+            minLength: 4,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProducto(ui.item);
+                }
+            }
+        });
+
+        if ($('#IdProducto').val() >= 0) {
+
+            CargarPresentaciones();
+        }
+
+        if ($('#IdTransaccionReferencia').val() != '') {
+            $('#btnRegistrarDetalle').hide();
+        }
+
+        CalcularMontoDescuento();
+        
+        $(".msgModelD .tips").hide();
+        $(".msgModelD .merror, .msgModelD .mexito, .msgModelD .loading").css({ "border-top": "none" });
+        $("#frmModelDetalle .merror").css({ "border-top": "none", "border-left": "none", "border-right": "none" });
+
+        $('#btnRegistrarDetalle').bind("click", function (e) {
+            if (resetFrmDetalle)
+                $(".msgModelD .tips").hide();
+
+            if ($("#frmModelDetalle").validate().form()) {
+                InicializarMsgDetalle();
+
+                $('#PrecioNeto').removeAttr('disabled');
+
+                $.post($("#frmModelDetalle").attr("action"), $("#frmModelDetalle").serialize(), function (response) {
+                    if (response.Success) {
+                        $(".msgModelD .loading").slideUp(200, function () {
+                            $(".msgModelD .mexito").html(response.Message);
+                            JOERP.ShowElement(".msgModelD .mexito");
+                            $('#btnRegistrarDetalle').hide();
+                            resetFrmDetalle = true;
+                        });
+                    } else {
+                        $(".msgModelD .loading").slideUp(200, function () {
+                            $(".msgModelD .merror").html(response.Message);
+                            JOERP.ShowElement(".msgModelD .merror");
+                        });
+                        resetFrmDetalle = true;
+                    }
+                });
+            }
+            $('#PrecioNeto').attr('disabled', 'disabled');
+            e.preventDefault();
+        });
+
+        RedondearNumeros();
+    });
+
+    function CancelarDetalle() {
+
+        $('#refresh_tablaDetalle').trigger('click');
+        $('#informacionDetalle').dialog("close");
+        $('#informacionDetalle').html('');
+        CalcularMontos();
+    }
+
+    function InicializarMsgDetalle() {
+        if ($(".msgModelD .merror").is(":visible")) {
+            $(".msgModelD .merror").slideUp(200, function () {
+                JOERP.ShowElement(".msgModelD .loading");
+            });
+        } else
+            JOERP.ShowElement(".msgModelD .loading");
+    }
+
+    function ListarLotes() {
+
+        var url = '@Url.Action("ListarLotes", "Venta")';
+        var parametro = { idDetalle: $('#IdMovimientoProducto').val() };
+        var resultado = JOERP.Ajax(url, parametro, false);
+        var tablaHtml = '';
+
+        if (resultado != null) {
+
+            $.each(resultado, function (index, item) {
+
+                tablaHtml += '<tr id="tr' + index + '" style="text-align: center;">';
+                tablaHtml += '<td>' + index + '</td>';
+                tablaHtml += '<td>' + item.LoteSerie + '</td>';
+                tablaHtml += '<td>' + item.FechaVencimientoFormato + '</td>';
+                tablaHtml += '<td>' + item.Cantidad + '</td>';
+                tablaHtml += '</tr>';
+            });
+        }
+
+        $('#tablaDetalleLotes').html(tablaHtml);
+    }
+
+    function CargarProducto(item) {
+        var idProducto = item.id;
+        var codigo = item.codigo;
+        var nombre = item.nombre;
+        var tipoProducto = item.tipo;
+        var alterno = item.alterno;
+
+        $('#IdProducto').val(idProducto);
+        $('#NombreProducto').val(nombre);
+        $('#CodigoProducto').val(codigo);
+        $('#TipoClasificacion').val(tipoProducto);
+        $('#CodigoAlternoProducto').val(alterno);
+
+        CargarPresentaciones();
+    }
+
+    function CargarPresentaciones() {
+
+        var idProducto = $('#IdProducto').val();
+        var url = '@Url.Action("CargarPresentaciones", "Consultas", new { area = "" })';
+        var parametros = { idProducto: idProducto };
+        var presentaciones = JOERP.Ajax(url, parametros, false);
+
+        var html = "";
+        $(presentaciones).each(function (index, presentacion) {
+            html = html + "<option value=" + presentacion.IdPresentacion + ">" + presentacion.Nombre + "</option> ";
+        });
+        $("#IdPresentacion").html(html);
+
+        var tipoProducto = $('#TipoClasificacion').val();
+
+        if (tipoProducto == '2') {
+            if ($('#IdTransaccionReferencia').val() != '') {
+                $('#detalleLotes').show();
+                ListarLotes();
+            }
+        } else {
+            $('#detalleLotes').hide();
+            $('#tablaDetalleLotes').html('');
+        }
+    }
+
+    function CalcularPorcentajeDescuento() {
+
+        var montoDescuento = 0;
+        if ($('#MontoDescuento').val() != '') {
+            montoDescuento = $('#MontoDescuento').val();
+        }
+        var cantidad = 0;
+        if ($('#Cantidad').val() != '') {
+            cantidad = $('#Cantidad').val();
+        }
+        var precioUnitario = 0;
+        if ($('#PrecioBase').val() != '') {
+            precioUnitario = $('#PrecioBase').val();
+        }
+        var porcentajeDescuento = 0;
+        var totalBruto = parseFloat((parseFloat(cantidad).toFixed(4) * parseFloat(precioUnitario).toFixed(4)).toFixed(4));
+        if (totalBruto != 0) {
+            porcentajeDescuento = parseFloat((parseFloat(montoDescuento) * 100) / totalBruto).toFixed(4);
+        }
+
+        porcentajeDescuento = JOERP.Redondear(porcentajeDescuento, 4);
+
+        $('#PorcentajeDescuento').val(porcentajeDescuento);
+
+        var total = JOERP.Redondear((totalBruto - parseFloat(montoDescuento).toFixed(2)), 2);
+        total = JOERP.Redondear(total, 2);
+        $('#txtSubTotalParcial').val(total);
+    }
+
+    function CalcularMontoDescuento() {
+
+        var porcentajeDescuento = 0;
+        if ($('#PorcentajeDescuento').val() != '') {
+            porcentajeDescuento = $('#PorcentajeDescuento').val();
+        }
+        var cantidad = 0;
+        if ($('#Cantidad').val() != '') {
+            cantidad = $('#Cantidad').val();
+        }
+        var precioUnitario = 0;
+        if ($('#PrecioBase').val() != '') {
+            precioUnitario = $('#PrecioBase').val();
+        }
+
+        var montoDescuento = 0;
+        var totalBruto = JOERP.Redondear((parseFloat(cantidad) * parseFloat(precioUnitario).toFixed(4)), 4);
+        if (totalBruto != 0) {
+            montoDescuento = JOERP.Redondear(((parseFloat(porcentajeDescuento).toFixed(4) * totalBruto) / 100), 4);
+        }
+
+        montoDescuento = JOERP.Redondear(montoDescuento, 4);
+
+        $('#MontoDescuento').val(montoDescuento);
+
+        var total = totalBruto - parseFloat(montoDescuento).toFixed(2);
+        total = JOERP.Redondear(total, 2);
+
+        $('#txtSubTotalParcial').val(total);
+    }
+
+    function CalcularPorcentajeDescuento2() {
+
+        var montoDescuento = 0;
+        if ($('#MontoDescuento2').val() != '') {
+            montoDescuento = $('#MontoDescuento2').val();
+        }
+
+        var porcentajeDescuento = 0;
+        var totalBruto = $('#txtSubTotalParcial').val();
+        if (totalBruto != 0) {
+            porcentajeDescuento = JOERP.Redondear(((parseFloat(montoDescuento).toFixed(4) * 100) / totalBruto), 4);
+        }
+
+        porcentajeDescuento = JOERP.Redondear(porcentajeDescuento, 4);
+
+        $('#PorcentajeDescuento2').val(porcentajeDescuento);
+
+        var total = JOERP.Redondear((totalBruto - parseFloat(montoDescuento).toFixed(2)), 2);
+        total = JOERP.Redondear(total, 2);
+        $('#PrecioNeto').val(total);
+    }
+
+    function CalcularMontoDescuento2() {
+
+        var porcentajeDescuento = 0;
+        if ($('#PorcentajeDescuento2').val() != '') {
+            porcentajeDescuento = $('#PorcentajeDescuento2').val();
+        }
+
+
+        var montoDescuento = 0;
+        var totalBruto = $('#txtSubTotalParcial').val();
+        if (totalBruto != 0) {
+            montoDescuento = JOERP.Redondear(((parseFloat(porcentajeDescuento).toFixed(4) * totalBruto) / 100), 4);
+        }
+
+        montoDescuento = JOERP.Redondear(montoDescuento, 4);
+
+        $('#MontoDescuento2').val(montoDescuento);
+
+        var total = JOERP.Redondear((totalBruto - parseFloat(montoDescuento).toFixed(2)), 2);
+        total = JOERP.Redondear(total, 2);
+
+        $('#PrecioNeto').val(total);
+    }
+
+    function CalcularTotal() {
+        
+        var cantidad = 0;
+        if ($('#Cantidad').val() != '') {
+            cantidad = $('#Cantidad').val();
+        }
+        var precioUnitario = 0;
+        if ($('#PrecioBase').val() != '') {
+            precioUnitario = $('#PrecioBase').val();
+        }
+
+        var totalBruto = JOERP.Redondear((parseFloat(cantidad).toFixed(2) * parseFloat(precioUnitario).toFixed(2)), 2);
+
+        var montoDescuento = 0;
+        if ($('#MontoDescuento').val() != '') {
+            montoDescuento = $('#MontoDescuento').val();
+        }
+        var montoDescuento2 = 0;
+        if ($('#MontoDescuento2').val() != '') {
+            montoDescuento2 = $('#MontoDescuento2').val();
+        }
+
+        var total = JOERP.Redondear((totalBruto - parseFloat(montoDescuento).toFixed(4) - parseFloat(montoDescuento2).toFixed(4)), 2);
+        total = JOERP.Redondear(total, 2);
+        $('#PrecioNeto').val(total);
+    }
+
+    function RedondearNumeros() {
+
+        $('#PrecioBase').val(JOERP.Redondear($('#PrecioBase').val(), 2));
+        $('#Cantidad').val(JOERP.Redondear($('#Cantidad').val(), 0));
+        $('#MontoDescuento').val(JOERP.Redondear($('#MontoDescuento').val(), 4));
+        $('#PorcentajeDescuento').val(JOERP.Redondear($('#PorcentajeDescuento').val(), 4));
+        $('#PrecioNeto').val(JOERP.Redondear($('#PrecioNeto').val(), 2));
+    }
+
+</script>

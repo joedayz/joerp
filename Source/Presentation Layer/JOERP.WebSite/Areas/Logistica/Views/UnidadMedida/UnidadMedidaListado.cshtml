@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "UnidadMedidaListado";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    <table id="tabla">
+    </table>
+    <div id="barra">
+    </div>
+</div>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<div id="infoDelete" style="display: none;">
+</div>
+ <div id="dialog-delete" style="display: none;">
+    Esta seguro de quitar el registro seleccionado?
+</div>
+<script type='text/javascript'>
+    var grilla = 'tabla';
+
+    $(document).ready(function () {
+       
+        Listar();
+        CrearDialogs();
+
+        $('#infoDelete').dialog("destroy");
+        $('#infoDelete').dialog({
+            width: 'auto',
+            resizable: false,
+            modal: true,
+            autoOpen: false,
+            open: function (type, data) { $(this).parent().appendTo("form"); },
+            close: function () { }
+
+        });
+    });
+
+    function Listar() {
+        var colNames = ['ID', 'Nombre', 'Abreviatura', 'Descripcion', 'Empresa' ];
+        var colModels = [
+                { name: 'IdUnidadMedida', index: 'IdUnidadMedida', align: 'center', hidden: true, width: 40, searchoptions: { sopt: ['eq']} },
+                //{ name: 'NombreEmpresa', index: 'NombreEmpresa', align: 'center', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'Nombre', index: 'Nombre', align: 'center', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'Abreviatura', index: 'Abreviatura', align: 'center', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'Descripcion', index: 'Descripcion', align: 'center', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'IdEmpresa', index: 'IdEmpresa', align: 'center',hidden: true, searchoptions: { sopt: ['cn', 'bw']} },
+                
+        ];
+
+        var opciones = { nuevo: true, editar: true, eliminar: true };
+
+        JOERP.Grilla(grilla, 'barra', 'hfIdentificador', 'auto', 1000, 'Mantenedor de Unidad de Medida', ' @Url.Action("Listar", "UnidadMedida", new { area = "Logistica" })', 'id', colNames, colModels, 'IdUnidadMedida', opciones);
+
+        $("#" + grilla).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+    }
+
+    function CrearDialogs() {
+        var arrayDialog = [{ name: "dialog-alert", height: 100, width: 280, title: "Alerta"}];
+        JOERP.CreateDialogs(arrayDialog);
+    }
+
+    function Nuevo() {
+        var url = '@Url.Action("Crear", "UnidadMedida", new { area = "Logistica" })';
+        JOERP.Operacion(url);
+    }
+
+    function Editar(rowkey) {
+        var url = '@Url.Action("Modificar", "UnidadMedida", new { area = "Logistica" })' + '/' + rowkey;
+        JOERP.Operacion(url);
+    }
+
+    function Eliminar(rowkey) {
+
+        var url = '@Url.Action("Eliminar", "UnidadMedida")';
+        var parametros = { id: rowkey };
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+            $('#tabla').trigger('reloadGrid');
+        } else {
+            $("#infoDelete").html(resultado.Message);
+            $('#infoDelete').dialog("open");
+        }
+
+        $('#dialog-delete').dialog("close");
+    }
+    
+</script>

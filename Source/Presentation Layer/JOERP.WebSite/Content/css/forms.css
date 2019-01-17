@@ -1,0 +1,504 @@
+﻿.inputbox, .selectbox, .areabox
+{
+    border: 1px solid #e6e6e6;
+    padding: 1px 4px;
+    color: #555;
+    background-color: #fff;
+    line-height: 18px;
+    margin: 0px 0.25em 0px 0px;
+    height: 19px;
+    width: 250px;
+    font-size: 1em;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+.text-area
+{
+    width: 536px;
+    height: 50px;
+    border: 1px solid #89bad3;
+    padding: 0.4em 0.5em;
+    color: #333;
+    line-height: 1em;
+    border-radius: 0.41em;
+       
+}
+
+.inputbox:focus, .selectbox:focus, .areabox:focus
+{
+    border: 1px solid #ffb74c;
+}
+
+.selectbox
+{
+    padding-right: 2px;
+    height: 23px;
+}
+
+.areabox
+{
+    overflow: auto;
+    padding-right: 2px;
+    height: 50px;
+}
+
+.buttonblue
+{
+    background: transparent url('../images/forms/but_right_blue.gif') no-repeat top right;
+    color: #555 !important;
+    display: block;
+    float: left;
+    height: 29px;
+    margin: 10px 6px 0 0;
+    padding-right: 12px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.buttonblue span
+{
+    background: url('../images/forms/but_left_blue.gif') no-repeat left top;
+    display: block;
+    height: 29px;
+    line-height: 29px;
+    padding-left: 12px;
+    float: left;
+}
+
+.buttonblue:hover
+{
+    background-position: right bottom;
+    text-decoration: none !important;
+}
+
+.buttonblue:hover span
+{
+    background-position: left bottom;
+    color: #1b486a !important;
+}
+
+.buttongrey
+{
+    background: transparent url('../images/forms/but_right_grey.gif') no-repeat top right;
+    color: #555 !important;
+    display: block;
+    float: left;
+    height: 30px;
+    margin: 10px 6px 0 0;
+    padding-right: 12px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.buttongrey span
+{
+    background: url('../images/forms/but_left_grey.gif') no-repeat left top;
+    display: block;
+    line-height: 30px;
+    padding: 0px 0px 0px 12px;
+    float: left;
+}
+
+.buttongrey:hover
+{
+    background-position: right bottom;
+    text-decoration: none !important;
+}
+
+.buttongrey:hover span
+{
+    background-position: left bottom;
+    color: #333 !important;
+}
+/* MISC
+-------------------------------*/
+
+.headline
+{
+    padding-left: 35px;
+    display: block;
+    background: url(../images/forms/icon_content_small.gif) no-repeat left 3px;
+    margin: 20px auto;
+    height: 28px;
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 5px;
+}
+
+.headline h1
+{
+    float: left;
+    font-size: 22px;
+}
+
+.headline span
+{
+    float: left;
+    padding-left: 8px;
+    display: inline-block;
+    padding-top: 8px;
+}
+
+.datepicker
+{
+    background: url(../images/forms/calendar-month.png) no-repeat right center;
+    background-position: 98% center;
+    width: 130px;
+    padding-right: 23px;
+}
+
+table.frmContent
+{
+    margin: 0 auto;
+}
+
+table.frmContent td
+{
+    vertical-align: top;
+    padding: 3px 13px 3px 3px;
+}
+
+p.frmRequired
+{
+    font-family: 10px font-family: "Lucida Grande" , Helvetica, Arial, Verdana, sans-serif;
+    color: #999;
+    padding: 10px 0 0 6px;
+}
+
+.layoutbtns
+{
+    float: right;
+}
+
+.etiqueta
+{
+    padding-left: 3px;
+    line-height: 20px;
+}
+
+.width50
+{
+    width: 50px;
+}
+
+.width80
+{
+    width: 80px;
+}
+
+.picker
+{
+    position: relative;
+}
+
+.picker span
+{
+    background: url("../images/dp/cal.gif") no-repeat;
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    cursor: pointer;
+    left: -26px;
+    bottom: -4px;
+    bottom: 3px;
+}
+/* Content form
+-------------------------------*/
+
+.block-border
+{
+    border: 1px solid #fff;
+    background: url(../images/forms/white20.png) repeat left top;
+    padding: 0.83em;
+}
+
+.block-content
+{
+    overflow: auto;
+    border: 1px solid #999;
+    padding: 1.66em;
+    background-color: #fff;
+}
+/* Content form - tabs
+-------------------------------*/
+
+.tabwidget
+{
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.tabcontent
+{
+    min-height: 50px;
+    overflow: auto;
+}
+
+ul.multi-tabs-navbar
+{
+    float: left;
+    list-style-type: none;
+    width: 100%;
+}
+
+ul.multi-tabs-navbar li
+{
+    float: left;
+    height: 27px;
+    position: relative;
+    margin-bottom: -1px;
+}
+
+ul.multi-tabs-navbar li > span
+{
+    display: block;
+    float: left;
+    font-weight: bold;
+    color: #808080;
+    padding: 0 0.7em;
+    line-height: 25px;
+    border: 1px solid #b3b3b3;
+    border-bottom: none;
+    cursor: pointer;
+    background: #eee url('../images/forms/tabs-bg.png') repeat-x 50% top;
+    margin-right: 5px;
+    -moz-border-radius: 0.25em 0.25em 0 0;
+    border-radius: 0.25em 0.25em 0 0;
+    -webkit-border-top-left-radius: 0.25em;
+    -webkit-border-top-right-radius: 0.25em;
+}
+
+ul.multi-tabs-navbar li span:hover
+{
+    color: #39c;
+    border: 1px solid #39c;
+    border-bottom: medium none;
+}
+
+ul.multi-tabs-navbar li.selected > span
+{
+    background: none;
+    background-color: #fff;
+    padding-bottom: 1px;
+}
+
+ul.multi-tabs-navbar li > span.last
+{
+    margin-right: 0px;
+}
+
+ul.multi-tabs
+{
+    clear: both;
+    margin-bottom: 20px;
+    padding: 15px;
+    list-style-type: none;
+    border: 1px solid #b3b3b3;
+    -moz-border-radius: 0.25em;
+    -webkit-border-radius: 0.25em;
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    -moz-border-radius-topleft: 0;
+    -webkit-border-top-left-radius: 0;
+    border-top-left-radius: 0;
+}
+
+ul.multi-tabs li
+{
+    display: block;
+    overflow: hidden;
+}
+/* Content form - fileset
+-------------------------------*/
+
+.fieldset-with-legend
+{
+    border: 1px solid #d9d9d9;
+}
+
+.fieldset-with-legend legend
+{
+    padding: 0.16em 0.5em 0.25em;
+    background: #e7e7e7 url(../images/forms/legend-bg.png) repeat-x 50% top;
+    color: #666;
+    border: 1px solid #fff;
+    margin-left: 0.83em;
+    margin-left: 0.4em;
+}
+.ie .fieldset-with-legend legend
+{
+    border-color: #ccc;
+}
+
+.fieldset-content
+{
+    padding: 1.66em;
+    padding-top: 1.5em;
+}
+
+/* Estilo para formulario Mhiosys!
+---------------------------------*/
+
+.MhiosysForm .tablelayout
+{
+    margin: 20px;
+}
+
+.MhiosysForm .tablelayout, .MhiosysForm .tablelayoutC
+{
+    width: auto;
+}
+
+.MhiosysForm .tablelayout td, .tablelayoutC td
+{
+    padding: 5px 5px;
+}
+
+.MhiosysForm .right
+{
+    text-align: right;
+}
+
+.MhiosysForm .tablelayout td label
+{
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+}
+
+.MhiosysForm .tablelayoutC td label
+{
+    font-size: 12px;
+}
+
+.MhiosysForm .tablelayoutC td .buttonConstellation
+{
+    float: right;
+    margin-right: 10px;
+}
+
+.MhiosysForm label
+{
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+}
+
+.MhiosysForm input[type="text"], .MhiosysForm input[type="password"], .MhiosysForm select
+{
+    width: 200px;
+    border: 1px solid #89bad3;
+    padding: 0.4em 0.5em;
+    color: #333;
+    line-height: 1em;
+    border-radius: 0.41em;
+    background: url(../images/account/input-bg.png) repeat-x left center;
+}
+
+.MhiosysForm .large input[type="text"], .MhiosysForm .large select
+{
+    width: 515px !important;
+}
+
+.medium 
+{
+    width: 415px !important;
+}
+
+.normal
+{
+    width: 215px !important;
+}
+
+.small
+{
+    width: 115px !important;
+}
+
+.short 
+{
+    width: 85px !important;
+}
+
+.MhiosysForm input[type="text"]:focus, .MhiosysForm input[type="password"]:focus, .MhiosysForm select:focus
+{
+    border-color: #39c;
+}
+
+.MhiosysForm select
+{
+    padding-bottom: 0.3em;
+    padding-top: 0.3em;
+    width: 215px;
+}
+
+.MhiosysForm .buttonConstellation
+{
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 0.33em;
+    border-shadow: 0px 1px 4px rgba(0, 0, 0, 0.4);
+    border-top: 1px solid #50a3c8;
+    border-right: 1px solid #297cb4;
+    border-bottom: 1px solid #083f6f;
+    border-left: 1px solid #297cb4;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.15em;
+    line-height: 1.42em;
+    padding: 0.22em 1em 0.28em;
+    background: url(../images/account/button-element-bg.png) repeat-x left center;
+}
+
+.MhiosysForm .buttonConstellation:hover
+{
+    border-top-color: #1eafdc;
+    border-right-color: #1193d5;
+    border-bottom-color: #035592;
+    border-left-color: #1193d5;
+    background: url(../images/account/button-element-hover-bg.png) repeat-x left center;
+}
+
+/* Estilos para aplicaciones auxiliares de validación
+-----------------------------------------------------------*/
+
+.MhiosysForm .tablelayout td .error
+{
+    color: #ff0000;
+}
+
+.MhiosysForm .tablelayout td li
+{
+    color: #ff0000;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+.input-validation-error
+{
+    border: 1px solid #ff0000 !important;
+    background-color: #ffeeee !important;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.validation-summary-valid
+{
+    display: none;
+}
+
+.field-validation-error
+{
+    color: #ff0000;
+}

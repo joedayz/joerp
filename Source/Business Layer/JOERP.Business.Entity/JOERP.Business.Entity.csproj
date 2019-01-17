@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DA34B198-A4A1-4980-BD93-B64BE50D90A1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JOERP.Business.Entity</RootNamespace>
+    <AssemblyName>JOERP.Business.Entity</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Almacen.cs" />
+    <Compile Include="Cargo.cs" />
+    <Compile Include="DatoEstructura.cs" />
+    <Compile Include="DatoEstructuraProducto.cs" />
+    <Compile Include="DTO\CargasInventarioDTO.cs" />
+    <Compile Include="DTO\Compra.cs" />
+    <Compile Include="DTO\DespachoDTO.cs" />
+    <Compile Include="DTO\DevolucionMercaderia.cs" />
+    <Compile Include="DTO\DistribucionMercaderia.cs" />
+    <Compile Include="DTO\HistorialPrecioDTO.cs" />
+    <Compile Include="DTO\IngresoAjusteInventarioDTO.cs" />
+    <Compile Include="DTO\IngresoCompraDTO.cs" />
+    <Compile Include="DTO\IngresoOtroConceptoDTO.cs" />
+    <Compile Include="DTO\NotaCredito.cs" />
+    <Compile Include="DTO\OrdenCompra.cs" />
+    <Compile Include="DTO\OrdenPedido.cs" />
+    <Compile Include="DTO\ProductoDTO.cs" />
+    <Compile Include="DTO\SalidaOtroConceptoDTO.cs" />
+    <Compile Include="DTO\TransaccionMovimientoDTO.cs" />
+    <Compile Include="DTO\Transferencia.cs" />
+    <Compile Include="DTO\Valorizacion.cs" />
+    <Compile Include="DTO\Venta.cs" />
+    <Compile Include="Empleado.cs" />
+    <Compile Include="EmpleadoListaPrecio.cs" />
+    <Compile Include="Empresa.cs" />
+    <Compile Include="EntidadFinanciera.cs" />
+    <Compile Include="EstructuraProducto.cs" />
+    <Compile Include="Formulario.cs" />
+    <Compile Include="Impuesto.cs" />
+    <Compile Include="Inventario.cs" />
+    <Compile Include="InventarioFisico.cs" />
+    <Compile Include="ItemTabla.cs" />
+    <Compile Include="Kardex.cs" />
+    <Compile Include="ListaPrecio.cs" />
+    <Compile Include="Moneda.cs" />
+    <Compile Include="MovimientoEntidadFinanciera.cs" />
+    <Compile Include="MovimientoProducto.cs" />
+    <Compile Include="MovimientoProductoStock.cs" />
+    <Compile Include="MovimientoSaldoDocumento.cs" />
+    <Compile Include="Operacion.cs" />
+    <Compile Include="OperacionDocumento.cs" />
+    <Compile Include="OperacionImpuesto.cs" />
+    <Compile Include="PermisoRol.cs" />
+    <Compile Include="PermisoUsuario.cs" />
+    <Compile Include="Persona.cs" />
+    <Compile Include="PersonaContacto.cs" />
+    <Compile Include="PersonaDireccion.cs" />
+    <Compile Include="PersonaEntidadFinanciera.cs" />
+    <Compile Include="PersonaFuncion.cs" />
+    <Compile Include="Presentacion.cs" />
+    <Compile Include="Producto.cs" />
+    <Compile Include="ProductoComponente.cs" />
+    <Compile Include="ProductoKardex.cs" />
+    <Compile Include="ProductoPrecio.cs" />
+    <Compile Include="ProductoProveedor.cs" />
+    <Compile Include="ProductoStock.cs" />
+    <Compile Include="Reporte.cs" />
+    <Compile Include="ReporteDetalle.cs" />
+    <Compile Include="Reportes\DetalleMovimiento.cs" />
+    <Compile Include="Rol.cs" />
+    <Compile Include="SaldoDocumento.cs" />
+    <Compile Include="SaldoEntidadFinanciera.cs" />
+    <Compile Include="SaldoPersona.cs" />
+    <Compile Include="SaldoProducto.cs" />
+    <Compile Include="SerieDocumento.cs" />
+    <Compile Include="Sucursal.cs" />
+    <Compile Include="Tabla.cs" />
+    <Compile Include="TipoCambio.cs" />
+    <Compile Include="Transaccion.cs" />
+    <Compile Include="TransaccionDocumento.cs" />
+    <Compile Include="TransaccionImpuesto.cs" />
+    <Compile Include="Ubigeo.cs" />
+    <Compile Include="UnidadMedida.cs" />
+    <Compile Include="UnidadTransporte.cs" />
+    <Compile Include="Usuario.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsuarioSucursal.cs" />
+    <Compile Include="Validations\AlmacenValidation.cs" />
+    <Compile Include="Validations\CargoValidation.cs" />
+    <Compile Include="Validations\CompraValidation.cs" />
+    <Compile Include="Validations\OrdenPedidoValidation.cs" />
+    <Compile Include="Validations\VentaValidation.cs" />
+    <Compile Include="Validations\EmpleadoValidation.cs" />
+    <Compile Include="Validations\EmpresaValidation.cs" />
+    <Compile Include="Validations\DatoEstructuraValidation.cs" />
+    <Compile Include="Validations\FormularioValidation.cs" />
+    <Compile Include="Validations\ImpuestoValidation.cs" />
+    <Compile Include="Validations\ItemTablaValidation.cs" />
+    <Compile Include="Validations\MonedaValidation.cs" />
+    <Compile Include="Validations\MovimientoProductoValidation.cs" />
+    <Compile Include="Validations\OperacionValidation.cs" />
+    <Compile Include="Validations\OrdenCompraValidation.cs" />
+    <Compile Include="Validations\PersonaDireccionValidation.cs" />
+    <Compile Include="Validations\PersonaValidation.cs" />
+    <Compile Include="Validations\PresentacionValidation.cs" />
+    <Compile Include="Validations\ProductoValidation.cs" />
+    <Compile Include="Validations\RolValidation.cs" />
+    <Compile Include="Validations\SerieDocumentoValidation.cs" />
+    <Compile Include="Validations\SucursalValidation.cs" />
+    <Compile Include="Validations\TablaValidation.cs" />
+    <Compile Include="Validations\TipoCambioValidation.cs" />
+    <Compile Include="Validations\TransaccionDocumentoValidation.cs" />
+    <Compile Include="Validations\TransferenciaValidation.cs" />
+    <Compile Include="Validations\UnidadMedidaValidation.cs" />
+    <Compile Include="Validations\UsuarioValidation.cs" />
+    <Compile Include="Validations\ValorizacionValidation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JOERP.Business.Helpers\JOERP.Helpers.csproj">
+      <Project>{5B91074A-B5CE-480D-845B-4FB632C61668}</Project>
+      <Name>JOERP.Helpers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

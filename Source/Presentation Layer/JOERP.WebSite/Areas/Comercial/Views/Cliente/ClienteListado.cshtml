@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "ClienteListado";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    <table id="tabla">
+    </table>
+    <div id="barra">
+    </div>
+</div>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<script type='text/javascript'>
+    var grilla = 'tabla';
+
+    $(document).ready(function () {
+        Listar();
+        CrearDialogs();
+    });
+
+    function Listar() {
+        var colNames = ['ID','Código', 'Nombre', 'Direccion', 'Telefono', 'Estado'];
+        var colModels = [
+          { name: 'IdEmpleado', index: 'IdEmpleado', hidden:true, width: 90, editable: false, align: 'center', searchoptions: { sopt: ['eq', 'lt', 'le', 'gt', 'ge']} }
+        , { name: 'Codigo', index: 'Codigo', width: 200, editable: true, align: 'center', sortable: true, search: true, searchoptions: { sopt: ['bw', 'bn']} }
+        , { name: 'Persona', index: 'Persona', width: 200, editable: true, align: 'center', sortable: true, search: true, searchoptions: { sopt: ['bw', 'bn']} }
+        , { name: 'Direccion', index: 'Direccion', width: 300, editable: true, align: 'center', sortable: false, search: true }
+        , { name: 'Telefono', index: 'Telefono', width: 300, editable: true, align: 'center', sortable: false, search: true }
+        , { name: 'NombreEstado', index: 'NombreEstado', width: 100, editable: false, align: 'center', sortable: false, search: true, stype: 'select', searchoptions: { sopt: ['eq'], value: 'it.Estado:Todo;1:Activo;0:Inactivo'} }
+        ];
+
+        var opciones = { nuevo: true, editar: true, eliminar: false, rules:true};
+
+        JOERP.Grilla(grilla, 'barra', 'hfIdentificador', 'auto', 1000, 'Mantenedor de Clientes', ' @Url.Action("Listar", "Cliente", new { area = "Comercial" })', 'id', colNames, colModels, 'IdPersona', opciones);
+
+        $("#" + grilla).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+    }
+
+    function GetRules() {
+
+        var valor = 2;
+        var rules = [{ field: 'IdFuncion', data: valor}];
+        return rules;
+    }
+    
+    function CrearDialogs() {
+        var arrayDialog = [{ name: "dialog-alert", height: 100, width: 280, title: "Alerta"}];
+        JOERP.CreateDialogs(arrayDialog);
+    }
+
+    function Nuevo() {
+
+        var url = '@Url.Action("Crear", "Cliente", new { area = "Comercial" })';
+        JOERP.Operacion(url);
+    }
+
+    function Editar(rowkey) {
+        var url = '@Url.Action("Modificar", "Cliente", new { area = "Comercial" })' + '/' + rowkey;
+        JOERP.Operacion(url);
+    }
+</script>

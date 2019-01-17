@@ -1,0 +1,131 @@
+﻿@model JOERP.Business.Entity.EstructuraProducto
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    @Html.HiddenFor(model => model.IdEstructuraProducto)
+    <table id="tabla">
+    </table>
+    <div id="barra">
+    </div>
+</div>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<div id="detalle" style="padding-left: 20px;">
+</div>
+<div id="infoDelete" style="display: none;">
+</div>
+ <div id="dialog-delete" style="display: none;">
+    Esta seguro de quitar el registro seleccionado?
+</div>
+<script type='text/javascript'>
+
+    var grilla = 'tabla';
+
+    $(document).ready(function () {
+        
+        $('#detalle').dialog({
+            autoOpen: false,
+            width: 500,
+            resizable: false,
+            modal: true,
+            closeOnEscape: false,
+            open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+        });
+
+        Listar($("#IdEstructuraProducto").val());
+        CrearDialogs();
+
+        $('#infoDelete').dialog("destroy");
+        $('#infoDelete').dialog({
+            width: 'auto',
+            resizable: false,
+            modal: true,
+            autoOpen: false,
+            open: function (type, data) { $(this).parent().appendTo("form"); },
+            close: function () { }
+
+        });
+    });
+
+    function Listar(id) {
+        var colNames = ['ID', 'Nombre', 'Descripcion','Padre','IdEstructuraProducto'];
+        var colModels = [
+                { name: 'IdDatoEstructura', index: 'IdDatoEstructura', align: 'center', hidden: true,  searchoptions: { sopt: ['eq']} },
+                { name: 'Nombre', index: 'Nombre', align: 'center', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'Descripcion', index: 'Descripcion', align: 'center',  searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'IdParent', index: 'IdParent', align: 'center',  stype: 'select', searchoptions: { dataUrl: '@Url.Action("TiposPadre", "EstructuraProducto", new { area = "Logistica" })' + '?idEstructura=' + id, sopt: ['eq']} },
+                { name: 'IdEstructuraProducto', index: 'IdEstructuraProducto', align: 'center', hidden: true, searchoptions: { sopt: ['eq']} },
+        ];
+
+        var opciones = { nuevo: true, editar: true, eliminar: true,  rules:true };
+        var url = '@Url.Action("Listar", "EstructuraProducto", new { area = "Logistica", id = "idT" })';
+        url = url.replace("idT", id);
+        JOERP.Grilla(grilla, 'barra', 'hfIdentificador', 'auto', 800, 'Mantenedor de Datos de Estructura de Producto', url, 'id', colNames, colModels, 'IdDatoEstructura', opciones);
+
+        $("#" + grilla).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+    }
+    
+    function GetRules() {
+    
+        var valor = $("#IdEstructuraProducto").val();
+        var rules = [{ field: 'IdEstructuraProducto', data: valor}];
+        return rules;
+    }
+    
+    function CrearDialogs() {
+        var arrayDialog = [{ name: "dialog-alert", height: 100, width: 280, title: "Alerta"}];
+        JOERP.CreateDialogs(arrayDialog);
+    }
+
+    function Nuevo() {
+        linkObj = $(this);
+        var idEstructuraProducto = $("#mainTree").jstree('get_selected').attr('id');
+        var dialogDiv = $('#detalleTree');
+        var viewUrl = '@Url.Action("CrearDato", "EstructuraProducto", new { area = "Logistica" })' + '?id=' + idEstructuraProducto;
+
+        $.get(viewUrl, function (data) {
+            dialogDiv.html(data);
+            //validation
+            var $form = $("#frmIdFormulario");
+            // Unbind existing validation
+            $form.unbind();
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function Editar(rowkey) {
+
+        linkObj = $(this);
+        var dialogDiv = $('#detalleTree');
+        var viewUrl = '@Url.Action("ModificarDato", "EstructuraProducto", new { area = "Logistica" })' + '?id=' + rowkey;
+        
+        $.get(viewUrl, function (data) {
+            dialogDiv.html(data);
+            //validation
+            var $form = $("#frmIdFormulario");
+            // Unbind existing validation
+            $form.unbind();
+            dialogDiv.dialog('open');
+        });
+        return false;
+    }
+
+    function Eliminar(rowkey) {
+
+        var url = '@Url.Action("Eliminar", "EstructuraProducto")';
+        var parametros = { id: rowkey };
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+            $('#tabla').trigger('reloadGrid');
+        } else {
+            $("#infoDelete").html(resultado.Message);
+            $('#infoDelete').dialog("open");
+        }
+
+        $('#dialog-delete').dialog("close");
+    }
+</script>

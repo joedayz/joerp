@@ -1,0 +1,267 @@
+﻿@{
+    ViewBag.Title = "Salida de Productos";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    <table id="tabla">
+    </table>
+    <div id="barra">
+    </div>
+</div>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<div id="informacionDetalle" title="Detalle de Venta" style="display: none;">
+</div>
+
+<div id="busquedaOrden" title="Seleccionar Pre-Venta" style="display: none;" class="MhiosysForm">
+    <table cellpadding="0" cellspacing="5">
+        <tr valign="top">
+            <td>
+                Proveedor :
+            </td>
+            <td>
+                <input type="hidden" id="hidIdProveedor" value="0" />
+                <input type="text" id="txtRUC" onblur="javascript:VerificarProveedor();"  style="width: 80px;"/>
+            </td>
+            <td colspan="2">
+                <input type="text" id="txtRazonSocial" style="width: 300px;" onblur="javascript:VerificarProveedor();"/>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td>
+               Desde :
+            </td>
+            <td>
+                <input type="text" id="txtDesde" class="fecha" style="width: 80px;" />
+            </td>
+            <td style="width: 80px;" >
+                Hasta :
+            </td>
+            <td >
+                <input type="text" id="txtHasta" class="fecha" style="width: 80px;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                N°Documento:
+            </td>
+            <td colspan="3">
+                <input type="text" id="txtSerie" maxlength="4" style="width: 50px;" /> - 
+                <input type="text" id="txtNumero" maxlength="8" style="width: 80px;" />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="3" align="right" style="font-size: 8pt;">
+                <input type="button" value="Buscar" id="btnBuscarOrden" class="buttonConstellation"  />
+                <input type="button" value="Regresar" id="btnCerrarBuscadorOC" class="buttonConstellation"/>
+            </td>
+        </tr>
+        
+        <tr >
+            <td colspan="4">
+                <table style="border-collapse: collapse; width: 540px;">
+                    <thead>
+                        <tr align="center" class="ui-jqgrid-titlebar ui-widget-header" style="height: 25px;">
+                            <th align="center" style="width: 10px">
+                                Documento
+                            </th>
+                            <th align="center" style="width: 400px;">
+                                Proveedor
+                            </th>
+                            <th align="center" style="width: 100px;">
+                                Fecha
+                            </th>
+                             <th align="right" style="width: 100px;">
+                                Monto
+                            </th>
+                            <th align="center" style="width: 40px;">
+                                Seleccionar
+                            </th>                           
+                        </tr>
+                    </thead>
+                    <tbody id="tablaOrdenes">
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+
+
+<div id="dialog-delete" style="display: none;">
+    Esta seguro de quitar el registro seleccionado?
+</div>
+
+<script type='text/javascript'>
+    var grilla = 'tabla';
+
+    $(document).ready(function () {
+        Listar();
+        CrearDialogs();
+        
+        $('#busquedaOrden').dialog("destroy");
+        $('#busquedaOrden').dialog({
+            width: 'auto',
+            resizable: false,
+            modal: true,
+            autoOpen: false,
+            open: function (type, data) { $(this).parent().appendTo("form"); },
+            close: function () { }
+
+        });
+        
+        $("#txtRUC").autocomplete({
+            source: '@Url.Action("BuscarProveedorRuc", "Consultas", new { area = "" })' + '?funcion=3',
+            minLength: 4,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProveedor(ui.item);
+                }
+            }
+        });
+
+        $("#txtRazonSocial").autocomplete({
+            source: '@Url.Action("BuscarProveedorRs", "Consultas", new { area = "" })' + '?funcion=3',
+            minLength: 4,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProveedor(ui.item);
+                }
+            }
+        });
+        
+         $('#btnBuscarOrden').click(function (e) {
+            
+            var parametros = {
+                idProveedor: $('#hidIdProveedor').val(), 
+                desde: $('#txtDesde').val(), 
+                hasta: $('#txtHasta').val(), 
+                documento: $('#txtSerie').val() + $('#txtNumero').val()
+            };
+            var ordenes = JOERP.Ajax('@Url.Action("BuscarOrden", "OrdenPedido", new { area = "" })',parametros, false);
+            var tablaOrdenes = "";
+
+            $.each(ordenes, function (index, o) {
+                
+                tablaOrdenes += "<tr>";
+               
+                tablaOrdenes += "<td class='bordeColumna'>" + o.Documento + "</td>";
+                tablaOrdenes += "<td class='bordeColumna'>" + o.RazonSocial + "</td>";
+                tablaOrdenes += "<td align= 'center' class='bordeColumna'>" + o.FechaDocumentoFormat + "</td>";
+                tablaOrdenes += "<td align= 'right' class='bordeColumna'>" + o.MontoNeto + "</td>";
+                tablaOrdenes += "<td align= 'right' class='bordeColumna'><a href='javascript:Seleccionar(" + o.IdTransaccion + ");' ><img src='@Url.Content("~/Content/images/notificaciones/success-ico.png")'/></a></td>";
+                tablaOrdenes += "</tr>";
+            });
+
+            $("#tablaOrdenes").html(tablaOrdenes);
+
+            e.preventDefault();
+        });
+        
+        $('#btnCerrarBuscadorOC').click(function (e) {
+            
+             $('#busquedaOrden').dialog('close');
+            e.preventDefault();
+        });
+    });
+
+    function Listar() {
+        var colNames = ['ID', 'Documento', 'Proveedor', 'Fecha Emisión', 'Monto Total', 'Estado'];
+        var colModels = [
+          { name: 'IdTransaccion', index: 'IdTransaccion', width: 90, editable: false, align: 'center', search: false }
+        , { name: 'Documento', index: 'Documento', width: 200, editable: true, align: 'center', sortable: true, search: true, searchoptions: { sopt: ['bw', 'bn']} }
+        , { name: 'RazonSocial', index: 'RazonSocial', width: 300, editable: true, align: 'center', sortable: false, search: true }
+        , { name: 'FechaDocumento', index: 'FechaDocumento', width: 300, editable: true, align: 'center', sortable: false, search: true }
+        , { name: 'MontoTotal', index: 'MontoTotal', width: 100, editable: false, align: 'center', sortable: false, search: false }
+        , { name: 'Estado', index: 'Estado', width: 100, editable: false, align: 'center', sortable: false, search: true, stype: 'select', searchoptions: { sopt: ['eq'], value: '-1:Todo;1:Activo;0:Inactivo'} }
+      ];
+
+        var opciones = { nuevo: true, editar: true, eliminar: true, rules: true };
+        var url = ' @Url.Action("Listar", "Venta", new { area = "Comercial" })';
+        
+        JOERP.Grilla(grilla, 'barra', 'hfIdentificador', 'auto', 1000, 'Listado de ingreso de productos', url, 'id', colNames, colModels, 'IdTransaccion', opciones);
+
+        $("#" + grilla).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+        
+        $('#' + grilla).navButtonAdd('#barra', {
+                caption: 'Cargar orden de pedido',
+                title: 'Cargar orden pedido',
+                buttonicon: 'ui-icon-folder-open',
+                position: 'first',
+                onClickButton: function () {
+                    $('#busquedaOrden').dialog('open');
+                }
+            });
+    }
+
+    function CrearDialogs() {
+        var arrayDialog = [{ name: "dialog-alert", height: 100, width: 280, title: "Alerta"}];
+        JOERP.CreateDialogs(arrayDialog);
+    }
+
+    function GetRules() {
+
+        var rules = [{ field: 'IdOperacion', data: @ViewData["Operacion"] }];
+        return rules;
+    }
+
+    function Nuevo() {
+
+        var url = '@Url.Action("Crear", "Venta", new { area = "Comercial" })';
+        JOERP.Operacion(url);
+    }
+
+    function Editar(rowkey) {
+        var url = '@Url.Action("Modificar", "Venta", new { area = "Comercial" })' + '/' + rowkey;
+        JOERP.Operacion(url);
+    }
+    
+    function Eliminar(rowkey) {
+
+        var url = '@Url.Action("Eliminar", "Venta")';
+        var parametros = { id: rowkey };
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+            $('#tabla').trigger('reloadGrid');
+        } else {
+            $("#infoDelete").html(resultado.Message);
+            $('#infoDelete').dialog("open");
+        }
+
+        $('#dialog-delete').dialog("close");
+    }
+    
+    function CargarProveedor(item) {
+        var idPersona = item.id;
+        var documento = item.ruc;
+        var razonSocial = item.razonSocial;
+        
+        $('#hidIdProveedor').val(idPersona);
+        $('#txtRUC').val(documento);
+        $('#txtRazonSocial').val(razonSocial);
+    }
+    
+    function Seleccionar(id) {
+        var url = '@Url.Action("CargarDesdeOrden", "Venta", new { area = "Comercial" })?id='+id;
+        JOERP.Operacion(url);
+        $('#busquedaOrden').dialog('close');
+    }
+
+     function VerificarProveedor() {
+        
+        if($('#txtRUC').val() == '' || $('#txtRazonSocial').val() == '') {
+            
+            $('#txtRUC').val('');
+            $('#txtRazonSocial').val('');
+            $('#hidIdProveedor').val(0);
+        }
+    }
+</script>

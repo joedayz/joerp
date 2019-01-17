@@ -1,0 +1,192 @@
+﻿@using JOERP.Helpers
+@{
+    ViewBag.Title = "Formularios";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+     <table style="width: 100%;">
+        <tbody>
+            <tr>
+                <td style="vertical-align: top; width: 30%;">
+                    <div class="MhiosysForm" style="padding-bottom: 20px;">
+                        <fieldset class="fieldset-with-legend border-round">
+                            <legend class="border-shadow">Operaciones : </legend>
+                            <div style="padding: 10px 10px 10px 10px;">
+                              
+                                    <input id="btnCrear" type="button" value="Crear" class="buttonConstellation" />                               
+                                    <input id="btnEditar" type="button" value="Editar" class="buttonConstellation" />
+                               
+                                  @*  <input id="btnEliminar" type="button" value="Eliminar" class="buttonConstellation" />*@
+                              
+                            </div>
+                        </fieldset>
+                    </div>
+                    <fieldset class="fieldset-with-legend border-round">
+                        <legend class="border-shadow">Módulos : </legend>
+                        <div id="mainTree" style="padding: 10px 10px 10px 10px;">
+                        </div>
+                    </fieldset>
+                </td>
+                <td style="width: 50%; vertical-align:top">
+                    <div id="mostrarTree" style=" padding-left: 20px;">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="detalleTree" style="padding-left: 20px;">
+</div>
+</div>
+
+
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<script type='text/javascript'>
+  
+    $(document).ready(function () {
+           Listar();
+        DisableButtons(true);
+    });
+
+ function Listar() {
+        $('#mainTree').jstree({
+                "json_data": {
+                    "ajax": {
+                        "url": '@Url.Action("GetTreeData", "Formulario", new { area = "Administracion" })',
+                        "type": "POST",
+                        "dataType": "json",
+                        "contentType": "application/json charset=utf-8"
+                    }
+                },
+                "themes": {
+                    "theme": "default",
+                    "dots": false,
+                    "icons": true,
+                    "url": "@Utils.AbsoluteWebRoot/Content/treeView/default/style.css"
+                },
+                "plugins": ["themes", "json_data", "dnd", "ui", "crrm"]
+            });
+    }
+
+    function DisableButtons(estado) {
+        $('#btnCrear').attr("disabled", estado);
+        $('#btnEditar').attr("disabled", estado);
+        $('#btnEliminar').attr("disabled", estado);
+    }
+
+    $("#dialog-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 150,
+            modal: true,
+            buttons: {
+                "Eliminar": function() {
+                    var id = $("#mainTree").jstree('get_selected').attr('id');
+
+                    $.ajax({
+                        url: '@Url.Action("Elimina", "Formulario", new { area = "Administracion" })' + '/' + id
+                        });
+                    $('#detalleTree').dialog("close");
+                    var tree = jQuery.jstree._reference("#mainTree");
+                    tree.refresh();
+                    document.getElementById("mostrarTree").style.display = 'none';
+                    $(this).dialog("close");
+                },
+                Cancel: function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+    $('#detalleTree').dialog({
+            autoOpen: false,
+            width: 750,
+            height : 350,
+            resizable: false,
+            modal: true,
+            closeOnEscape: false,
+            open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+        });
+
+    $("#mainTree").click(function() {
+        DisableButtons(false);
+        document.getElementById("mostrarTree").style.display = 'block';
+        var id = $("#mainTree").jstree('get_selected').attr('id');
+        var idModulo = $("#mainTree").jstree('get_selected').attr('rel');
+        if (idModulo != "0" && id != "0") {
+            $.ajax({
+                    url:'@Url.Action("Mostrar", "Formulario", new { area = "Administracion" })' + '?id=' + id,
+
+                    success: function(data) {
+                        $("#mostrarTree").html(data);
+                    }
+                });
+        } else {
+            document.getElementById("mostrarTree").style.display = 'none';
+        }
+    });
+
+    $("#btnCrear").click(function() {
+
+        var idParent = $("#mainTree").jstree('get_selected').attr('id');
+        var idModulo = $("#mainTree").jstree('get_selected').attr('rel');
+        if (idModulo != "0") {
+            $("#mainTree").jstree("create", null, false, "Nuevo Formulario", false, true);
+            document.getElementById("mostrarTree").style.display = 'none';
+            //change the title of the dialgo
+            linkObj = $(this);
+            var dialogDiv = $('#detalleTree');
+            var viewUrl = '@Url.Action("Crear", "Formulario", new { area = "Administracion" })' + '?idParent=' + idParent + '&idModulo=' + idModulo;
+            $.get(viewUrl, function(data) {
+                dialogDiv.html(data);
+                //validation
+                var $form = $("#frmIdFormulario");
+                // Unbind existing validation
+                $form.unbind();
+                dialogDiv.dialog('open');
+            });
+            return false;
+        } else {
+            csscody.alert("Si desea insertar en este nodo debe ir al mantenedor Tablas-Módulos");
+        }
+    });
+
+    $("#btnEditar").click(function() {
+
+        document.getElementById("mostrarTree").style.display = 'none';
+        var id = $("#mainTree").jstree('get_selected').attr('id');
+        var idModulo = $("#mainTree").jstree('get_selected').attr('rel');
+        if (idModulo != "0" && id != "0" || idModulo !== null) {
+            //change the title of the dialgo
+            linkObj = $(this);
+            var dialogDiv = $('#detalleTree');
+            var viewUrl = '@Url.Action("Modificar", "Formulario", new { area = "Administracion" })' + '?id=' + id;
+            $.get(viewUrl, function(data) {
+                dialogDiv.html(data);
+                //validation
+                var $form = $("#frmIdFormulario");
+                // Unbind existing validation
+                $form.unbind();
+                dialogDiv.dialog('open');
+            });
+            return false;
+        } else {
+            csscody.alert("Si desea editar este nodo debe ir al mantenedor Tablas-Módulos");
+        }
+    });
+
+    $("#btnEliminar").click(function() {
+        var id = $("#mainTree").jstree('get_selected').attr('id');
+        var idModulo = $("#mainTree").jstree('get_selected').attr('rel');
+        if (idModulo != "0" && id != "0") {
+            $("#dialog-confirm").dialog("open");
+        } else {
+            csscody.alert("Si desea eliminar este nodo debe ir al mantenedor Tablas-Módulos");
+        }
+    });
+
+</script>

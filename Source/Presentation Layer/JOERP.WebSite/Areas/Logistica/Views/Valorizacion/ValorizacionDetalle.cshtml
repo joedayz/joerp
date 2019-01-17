@@ -1,0 +1,212 @@
+﻿@model JOERP.Business.Entity.TransaccionDocumento
+
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<div class="msgModelD">
+    <div class="tips loading">
+        Por favor espere, procesando solicitud...
+    </div>
+    <div class="tips merror">
+    </div>
+    <div class="tips mexito">
+    </div>
+</div>
+<div class="MhiosysForm">
+   @using (Html.BeginForm(ViewData["Accion"].ToString(), "Valorizacion", new { area = "Logistica" }, FormMethod.Post, new { id = "frmModelDetalle" }))
+   {
+       <table border="0" cellpadding="5" cellspacing="5" style="width: 600px; margin: 10px;">
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.IdImpuesto)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.DropDownListFor(model => model.IdImpuesto, new SelectList(Model.Impuestos, "IdImpuesto", "Nombre", Model.IdImpuesto), new { @class = "normal" })
+                    @Html.ValidationMessageFor(model => model.IdImpuesto)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.IdTipoDocumento)
+                </td>
+                <td style="padding-left: 10px;">                
+                    @Html.DropDownListFor(model => model.IdTipoDocumento, new SelectList(Model.TiposDocumentos, "IdItemTabla", "Nombre", Model.IdTipoDocumento), new { @class = "normal" })
+                    @Html.ValidationMessageFor(model => model.IdTipoDocumento)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.SerieDocumento)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.SerieDocumento, new { @class = "normal", @onblur = "javascript:CompletarCeros(this, 4);" })
+                    @Html.ValidationMessageFor(model => model.SerieDocumento)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.NumeroDocumento)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.NumeroDocumento, new { @class = "normal", @onblur = "javascript:CompletarCeros(this, 8);" })
+                    @Html.ValidationMessageFor(model => model.NumeroDocumento)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.FechaDocumento)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.FechaDocumento, new { @Value = Model.FechaDocumento.ToString("dd/MM/yyyy"), @class = "normal", @onblur = "javascript:BuscarTipoCambio();" })
+                    @Html.ValidationMessageFor(model => model.FechaDocumento)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.IdMoneda)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.DropDownListFor(model => model.IdMoneda, new SelectList(Model.Monedas, "IdMoneda", "Nombre", Model.IdMoneda), new { @class = "normal" })
+                    @Html.ValidationMessageFor(model => model.IdMoneda)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.TipoCambio)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.TipoCambio, new { @class = "short noEsEditable", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.TipoCambio)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.Monto)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.Monto, new { @class = "short"})
+                    @Html.ValidationMessageFor(model => model.Monto)
+                </td>
+            </tr>
+            <tr>
+                <td class="right">
+                    @Html.LabelFor(model => model.Comentarios)
+                </td>
+                <td style="padding-left: 10px;">
+                    @Html.TextBoxFor(model => model.Comentarios, new { @class = "medium" })
+                    @Html.ValidationMessageFor(model => model.Comentarios)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.HiddenFor(model=> model.IdTransaccionDocumento)
+                    @Html.HiddenFor(model=> model.Documento)
+                    @Html.HiddenFor(model=> model.ImpuestoNombre)
+                    @Html.HiddenFor(model=> model.MonedaNombre)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: center">
+                    <br/>
+                    <input type="submit" value="Agregar" id="btnRegistrarDetalle" class="buttonConstellation" />
+                    <input type="button" value="Regresar" id="btnCancelDetalle"  class="buttonConstellation" onclick="CancelarDetalle()" />
+                </td>
+            </tr>    
+       </table>
+   }
+   </div>
+<script type="text/javascript">
+
+    var resetFrmDetalle = false;
+
+    $(document).ready(function () {
+
+        $('#FechaDocumento').datepicker({ changeMonth: true, changeYear: true, dateFormat: 'dd/mm/yy' });
+
+        $('#IdMoneda').change(function () {
+            BuscarTipoCambio();
+        });
+        BuscarTipoCambio();
+
+        $(".msgModelD .tips").hide();
+        $(".msgModelD .merror, .msgModelD .mexito, .msgModelD .loading").css({ "border-top": "none" });
+        $("#frmModelDetalle .merror").css({ "border-top": "none", "border-left": "none", "border-right": "none" });
+
+        $('#btnRegistrarDetalle').bind("click", function (e) {
+
+            if (resetFrmDetalle)
+                $(".msgModelD .tips").hide();
+
+            if ($("#frmModelDetalle").validate().form()) {
+
+                InicializarMsgDetalle();
+
+                $('#Documento').val($('#IdTipoDocumento option:selected').text());
+                $('#ImpuestoNombre').val($('#IdImpuesto option:selected').text());
+                $('#MonedaNombre').val($('#IdMoneda option:selected').text());
+                $('.noEsEditable').removeAttr('disabled');
+                
+                $.post($("#frmModelDetalle").attr("action"), $("#frmModelDetalle").serialize(), function (response) {
+                    if (response.Success) {
+                        $(".msgModelD .loading").slideUp(200, function () {
+                            $(".msgModelD .mexito").html(response.Message);
+                            JOERP.ShowElement(".msgModelD .mexito");
+                            $('btnRegistrarDetalle').hide();
+                            resetFrmDetalle = true;
+                        });
+                    } else {
+                        $(".msgModelD .loading").slideUp(200, function () {
+                            $(".msgModelD .merror").html(response.Message);
+                            JOERP.ShowElement(".msgModelD .merror");
+                        });
+                        resetFrmDetalle = true;
+                    }
+                });
+                $('.noEsEditable').attr('disabled', 'disabled');
+            }
+            e.preventDefault();
+        });
+    });
+
+    function CancelarDetalle() {
+
+        $('#refresh_tablaDetalle').trigger('click');
+        $('#informacionDetalle').dialog("close");
+        $("#informacionDetalle").html('');
+    }
+
+    function InicializarMsgDetalle() {
+        if ($(".msgModelD .merror").is(":visible")) {
+            $(".msgModelD .merror").slideUp(200, function () {
+                JOERP.ShowElement(".msgModelD .loading");
+            });
+        } else
+            JOERP.ShowElement(".msgModelD .loading");
+    }
+
+    function CompletarCeros(input, cantidad) {
+
+        if (input.value.length < cantidad) {
+            for (var i = input.value.length; i < cantidad; i++) {
+                input.value = '0' + input.value;
+            }
+        }
+    }
+
+    function BuscarTipoCambio() {
+        
+        var url = '@Url.Action("BuscarTipoCambio", "Consultas", new { Area = "" })';
+        var parametros = { idMoneda: $('#IdMoneda').val(), fecha: $('#FechaDocumento').val() };
+        var jsonResponse = JOERP.Ajax(url, parametros, false);
+
+        if (jsonResponse.Success == true) {
+            if(jsonResponse.Data ==null) {
+                alert('No existe tipo de cambio para la fecha de la moneda seleccionada.');
+            }
+            else {
+                $('#TipoCambio').val(jsonResponse.Data.ValorVenta);
+            }
+        } else {
+            alert('No existe tipo de cambio para la fecha de la moneda seleccionada.');
+        }
+    }
+    
+</script>

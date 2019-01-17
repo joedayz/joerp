@@ -1,0 +1,671 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{24F70B91-8226-47CC-A11C-0AC209A1074E}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JOERP.WebSite</RootNamespace>
+    <AssemblyName>JOERP.WebSite</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Libs\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.ReportViewer.Common">
+      <HintPath>..\..\..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel">
+      <HintPath>..\..\..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms">
+      <HintPath>..\..\..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Areas\Administracion\AdministracionAreaRegistration.cs" />
+    <Compile Include="Areas\Administracion\Controllers\CargoController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\EmpresaController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\FormularioController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\ImpuestoController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\ImpuestoOperacionController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\OperacionController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\PermisoRolController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\PermisoUsuarioController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\RolController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\SerieDocumentoController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\SucursalController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\TablaController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\UbigeoController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\UsuarioController.cs" />
+    <Compile Include="Areas\Administracion\Models\JsTreeModel.cs" />
+    <Compile Include="Areas\Comercial\ComercialAreaRegistration.cs" />
+    <Compile Include="Areas\Comercial\Controllers\ClienteController.cs" />
+    <Compile Include="Areas\Comercial\Controllers\DevolucionMercaderiaController.cs" />
+    <Compile Include="Areas\Comercial\Controllers\NotaCreditoController.cs" />
+    <Compile Include="Areas\Comercial\Controllers\OrdenPedidoController.cs" />
+    <Compile Include="Areas\Comercial\Controllers\VendedorController.cs" />
+    <Compile Include="Areas\Comercial\Controllers\VentaController.cs" />
+    <Compile Include="Areas\Finanzas\Controllers\MonedaController.cs" />
+    <Compile Include="Areas\Finanzas\Controllers\TipoCambioController.cs" />
+    <Compile Include="Areas\Finanzas\FinanzasAreaRegistration.cs" />
+    <Compile Include="Areas\Logistica\Controllers\AlmacenController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\ComponenteController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\CompraController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\ConductorController.cs" />
+    <Compile Include="Areas\Administracion\Controllers\EmpleadoController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\DespachoMercaderiaController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\DistribucionMercaderiaController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\EstructuraProductoController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\OrdenCompraController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\OtrasSalidasController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\OtrosIngresosController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\ProductoController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\ProveedorController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\RecepcionTransferenciaController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\ReporteController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\TransferenciaMercaderiaController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\TransporteController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\UnidadMedidaController.cs" />
+    <Compile Include="Areas\Logistica\Controllers\ValorizacionController.cs" />
+    <Compile Include="Areas\Logistica\LogisticaAreaRegistration.cs" />
+    <Compile Include="Controllers\ConsultasController.cs" />
+    <Compile Include="Controllers\ERPController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SesionController.cs" />
+    <Compile Include="Core\BaseController.cs" />
+    <Compile Include="Core\Extensiones\CustomValidationExtensions.cs" />
+    <Compile Include="Core\Helpers\TreeViewHtmlHelper.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\crm\css\busquedas.css" />
+    <Content Include="Content\crm\css\controls.css" />
+    <Content Include="Content\crm\css\global.css" />
+    <Content Include="Content\crm\css\site.css" />
+    <Content Include="Content\crm\images\16_delete.gif" />
+    <Content Include="Content\crm\images\16_edit.gif" />
+    <Content Include="Content\crm\images\16_info.gif" />
+    <Content Include="Content\crm\images\16_new.gif" />
+    <Content Include="Content\crm\images\16_print.gif" />
+    <Content Include="Content\crm\images\16_save.gif" />
+    <Content Include="Content\crm\images\16_saveclose.gif" />
+    <Content Include="Content\crm\images\16_saveopen.gif" />
+    <Content Include="Content\crm\images\appmenu_back.gif" />
+    <Content Include="Content\crm\images\app_titlebar.gif" />
+    <Content Include="Content\crm\images\app_titlebar_hover.gif" />
+    <Content Include="Content\crm\images\areaButton.png" />
+    <Content Include="Content\crm\images\bgheadercolor.png" />
+    <Content Include="Content\crm\images\btn_rest.gif" />
+    <Content Include="Content\crm\images\control_imgs_1.gif" />
+    <Content Include="Content\crm\images\customaction.gif" />
+    <Content Include="Content\crm\images\dynbutton_down.jpg" />
+    <Content Include="Content\crm\images\dynbutton_hover.jpg" />
+    <Content Include="Content\crm\images\dynbutton_rest.jpg" />
+    <Content Include="Content\crm\images\footstatusbar.gif" />
+    <Content Include="Content\crm\images\form_back.gif" />
+    <Content Include="Content\crm\images\form_toolbar_back.gif" />
+    <Content Include="Content\crm\images\gridtoolbar_back.gif" />
+    <Content Include="Content\crm\images\headerbg.png" />
+    <Content Include="Content\crm\images\highlightedAreaButton.png" />
+    <Content Include="Content\crm\images\home32.png" />
+    <Content Include="Content\crm\images\icons-hover.png" />
+    <Content Include="Content\crm\images\icons.png" />
+    <Content Include="Content\crm\images\ico_lrg_2010.gif" />
+    <Content Include="Content\crm\images\journal32.png" />
+    <Content Include="Content\crm\images\label.png" />
+    <Content Include="Content\crm\images\mast_back.gif" />
+    <Content Include="Content\crm\images\nav_header_back.gif" />
+    <Content Include="Content\crm\images\pagebackground.gif" />
+    <Content Include="Content\crm\images\products32.png" />
+    <Content Include="Content\crm\images\qfind.gif" />
+    <Content Include="Content\crm\images\qfindclear.gif" />
+    <Content Include="Content\crm\images\qfindcleardown.gif" />
+    <Content Include="Content\crm\images\qfindclearhover.gif" />
+    <Content Include="Content\crm\images\qfinddown.gif" />
+    <Content Include="Content\crm\images\qfindhover.gif" />
+    <Content Include="Content\crm\images\registro.png" />
+    <Content Include="Content\crm\images\rowHover.png" />
+    <Content Include="Content\crm\images\selectedAreaButton.png" />
+    <Content Include="Content\crm\images\settings32.png" />
+    <Content Include="Content\crm\images\subareaHeading.png" />
+    <Content Include="Content\crm\images\tab_off_back.gif" />
+    <Content Include="Content\crm\images\titlebar.png" />
+    <Content Include="Content\crm\images\toggle-collapse-blue.png" />
+    <Content Include="Content\crm\images\toggle-expand-blue.png" />
+    <Content Include="Content\crm\images\toolbar_hover.gif" />
+    <Content Include="Content\crm\images\users32.png" />
+    <Content Include="Content\crm\images\wizard_header.jpg" />
+    <Content Include="Content\crm\images\wizard_headerback.gif" />
+    <Content Include="Content\crm\images\workplaceBackground.png" />
+    <Content Include="Content\css\account.css" />
+    <Content Include="Content\css\complex.css" />
+    <Content Include="Content\css\demo_page.css" />
+    <Content Include="Content\css\demo_table.css" />
+    <Content Include="Content\css\demo_table_jui.css" />
+    <Content Include="Content\css\dp.css" />
+    <Content Include="Content\css\Format.css" />
+    <Content Include="Content\css\forms.css" />
+    <Content Include="Content\css\highslide.css" />
+    <Content Include="Content\css\jquery.multiselect.css" />
+    <Content Include="Content\css\MessageBox.css" />
+    <Content Include="Content\css\notificaciones.css" />
+    <Content Include="Content\css\tableCheck.css" />
+    <Content Include="Content\css\TabPanel.css" />
+    <Content Include="Content\es_ES.txt" />
+    <Content Include="Content\images\80ade5_40x100_textures_04_highlight_hard_100.png" />
+    <Content Include="Content\images\account\bg.png" />
+    <Content Include="Content\images\account\block-header-bg.png" />
+    <Content Include="Content\images\account\button-element-bg.png" />
+    <Content Include="Content\images\account\button-element-hover-bg.png" />
+    <Content Include="Content\images\account\chevron-expand-off.png" />
+    <Content Include="Content\images\account\chevron-expand.png" />
+    <Content Include="Content\images\account\chevron-off.png" />
+    <Content Include="Content\images\account\chevron.png" />
+    <Content Include="Content\images\account\content-dark-bg.png" />
+    <Content Include="Content\images\account\Info.png" />
+    <Content Include="Content\images\account\input-bg.png" />
+    <Content Include="Content\images\account\legend-bg.png" />
+    <Content Include="Content\images\account\title-bg.png" />
+    <Content Include="Content\images\account\white20.png" />
+    <Content Include="Content\images\ajax-loader.png" />
+    <Content Include="Content\images\back_disabled.jpg" />
+    <Content Include="Content\images\back_enabled.jpg" />
+    <Content Include="Content\images\bg-box-body.gif" />
+    <Content Include="Content\images\bg-box-body.png" />
+    <Content Include="Content\images\bg-box-bottom.gif" />
+    <Content Include="Content\images\bg-box-bottom.png" />
+    <Content Include="Content\images\bg-box-top.png" />
+    <Content Include="Content\images\close.png" />
+    <Content Include="Content\images\closeX.png" />
+    <Content Include="Content\images\controlbar-black-border.gif" />
+    <Content Include="Content\images\controlbar-text-buttons.png" />
+    <Content Include="Content\images\controlbar-white-small.gif" />
+    <Content Include="Content\images\controlbar-white.gif" />
+    <Content Include="Content\images\controlbar2.gif" />
+    <Content Include="Content\images\controlbar3.gif" />
+    <Content Include="Content\images\controlbar4-hover.gif" />
+    <Content Include="Content\images\controlbar4.gif" />
+    <Content Include="Content\images\D1E6FC_40x100_textures_10_dots_medium_90.png" />
+    <Content Include="Content\images\d6d6d6_40x100_textures_02_glass_80.png" />
+    <Content Include="Content\images\delete.gif" />
+    <Content Include="Content\images\dialog-error.png" />
+    <Content Include="Content\images\dialog-help.png" />
+    <Content Include="Content\images\dialog-warning.png" />
+    <Content Include="Content\images\dp\btn-arrow-light.gif" />
+    <Content Include="Content\images\dp\btn-arrow.gif" />
+    <Content Include="Content\images\dp\cal.gif" />
+    <Content Include="Content\images\dp\glass-bg.gif" />
+    <Content Include="Content\images\dp\gradient-bg.gif" />
+    <Content Include="Content\images\dp\hd-sprite.gif" />
+    <Content Include="Content\images\dp\left-btn.gif" />
+    <Content Include="Content\images\dp\right-btn.gif" />
+    <Content Include="Content\images\dp\tool-sprites.gif" />
+    <Content Include="Content\images\dt-arrow-dn.png" />
+    <Content Include="Content\images\dt-arrow-up.png" />
+    <Content Include="Content\images\eeeeee_40x100_textures_02_glass_90.png" />
+    <Content Include="Content\images\favicon.ico" />
+    <Content Include="Content\images\Folder.ico" />
+    <Content Include="Content\images\form.ico" />
+    <Content Include="Content\images\forms\but_left_blue.gif" />
+    <Content Include="Content\images\forms\but_left_grey.gif" />
+    <Content Include="Content\images\forms\but_right_blue.gif" />
+    <Content Include="Content\images\forms\but_right_grey.gif" />
+    <Content Include="Content\images\forms\calendar-month.png" />
+    <Content Include="Content\images\forms\legend-bg.png" />
+    <Content Include="Content\images\forms\tabs-bg.png" />
+    <Content Include="Content\images\forms\white20.png" />
+    <Content Include="Content\images\forward_disabled.jpg" />
+    <Content Include="Content\images\forward_enabled.jpg" />
+    <Content Include="Content\images\fullexpand.gif" />
+    <Content Include="Content\images\geckodimmer.png" />
+    <Content Include="Content\images\go-dn-on.gif" />
+    <Content Include="Content\images\go-lt-off.gif" />
+    <Content Include="Content\images\go-lt-on.gif" />
+    <Content Include="Content\images\go-rt-off.gif" />
+    <Content Include="Content\images\go-rt-on.gif" />
+    <Content Include="Content\images\go-up-on.gif" />
+    <Content Include="Content\images\icon-search-black.png" />
+    <Content Include="Content\images\icon.gif" />
+    <Content Include="Content\images\icons-18-black.png" />
+    <Content Include="Content\images\icons-18-white.png" />
+    <Content Include="Content\images\icons-36-black.png" />
+    <Content Include="Content\images\icons-36-white.png" />
+    <Content Include="Content\images\loader.gif" />
+    <Content Include="Content\images\loader.white.gif" />
+    <Content Include="Content\images\loading.gif" />
+    <Content Include="Content\images\notificaciones\alert-ico.png" />
+    <Content Include="Content\images\notificaciones\error-ico.png" />
+    <Content Include="Content\images\notificaciones\info-ico.png" />
+    <Content Include="Content\images\notificaciones\info-loader.gif" />
+    <Content Include="Content\images\notificaciones\information-ocre.png" />
+    <Content Include="Content\images\notificaciones\message-icons.png" />
+    <Content Include="Content\images\notificaciones\success-ico.png" />
+    <Content Include="Content\images\notificaciones\warning_bt_fechar.gif" />
+    <Content Include="Content\images\notificaciones\warning_icons.gif" />
+    <Content Include="Content\images\outlines\beveled.png" />
+    <Content Include="Content\images\outlines\drop-shadow.png" />
+    <Content Include="Content\images\outlines\glossy-dark.png" />
+    <Content Include="Content\images\outlines\outer-glow.png" />
+    <Content Include="Content\images\outlines\rounded-black.png" />
+    <Content Include="Content\images\outlines\rounded-white.png" />
+    <Content Include="Content\images\paginaconstruccion.jpg" />
+    <Content Include="Content\images\paper.ico" />
+    <Content Include="Content\images\pin-dn-off.gif" />
+    <Content Include="Content\images\pin-dn-on.gif" />
+    <Content Include="Content\images\pin-up-off.gif" />
+    <Content Include="Content\images\pin-up-on.gif" />
+    <Content Include="Content\images\resizable-e.gif" />
+    <Content Include="Content\images\resizable-s.gif" />
+    <Content Include="Content\images\resizable-w.gif" />
+    <Content Include="Content\images\resize.gif" />
+    <Content Include="Content\images\scrollarrows.png" />
+    <Content Include="Content\images\sort_asc.png" />
+    <Content Include="Content\images\sort_asc_disabled.png" />
+    <Content Include="Content\images\sort_both.png" />
+    <Content Include="Content\images\sort_desc.png" />
+    <Content Include="Content\images\sort_desc_disabled.png" />
+    <Content Include="Content\images\sprite.png" />
+    <Content Include="Content\images\TabPanel\scroll-left.gif" />
+    <Content Include="Content\images\TabPanel\scroll-right.gif" />
+    <Content Include="Content\images\TabPanel\tab-bg-active.gif" />
+    <Content Include="Content\images\TabPanel\tab-bg.gif" />
+    <Content Include="Content\images\TabPanel\tab-close.gif" />
+    <Content Include="Content\images\TabPanel\tab-content-bg.gif" />
+    <Content Include="Content\images\toggle-dn.gif" />
+    <Content Include="Content\images\toggle-up.gif" />
+    <Content Include="Content\images\zoomin.cur" />
+    <Content Include="Content\images\zoomout.cur" />
+    <Content Include="Content\jqgrid\ellipsis-xbl.xml" />
+    <Content Include="Content\jqgrid\redmond\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-bg_flat_55_fbec88_40x100.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-bg_glass_75_d0e5f5_1x400.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-bg_glass_85_dfeffc_1x400.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-icons_217bc0_256x240.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-icons_469bdd_256x240.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-icons_6da8d5_256x240.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-icons_d8e7f3_256x240.png" />
+    <Content Include="Content\jqgrid\redmond\images\ui-icons_f9bd01_256x240.png" />
+    <Content Include="Content\jqgrid\redmond\jquery-ui-1.8.1.custom.css" />
+    <Content Include="Content\jqgrid\ui.jqgrid.css" />
+    <Content Include="Content\jqgrid\ui.multiselect.css" />
+    <Content Include="Content\jquery.mobile-1.0b2.css" />
+    <Content Include="Content\jquery.mobile-1.0b2.min.css" />
+    <Content Include="Content\reset.css" />
+    <Content Include="Content\treeView\apple\bg.jpg" />
+    <Content Include="Content\treeView\apple\d.png" />
+    <Content Include="Content\treeView\apple\dot_for_ie.gif" />
+    <Content Include="Content\treeView\apple\style.css" />
+    <Content Include="Content\treeView\apple\throbber.gif" />
+    <Content Include="Content\treeView\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\treeView\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\treeView\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\treeView\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\treeView\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\treeView\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\treeView\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\treeView\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\treeView\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\treeView\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\treeView\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\treeView\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\treeView\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\treeView\base\jquery-ui.css" />
+    <Content Include="Content\treeView\checkbox\dot_for_ie.gif" />
+    <Content Include="Content\treeView\checkbox\icons.png" />
+    <Content Include="Content\treeView\checkbox\style.css" />
+    <Content Include="Content\treeView\checkbox\throbber.gif" />
+    <Content Include="Content\treeView\classic\d.gif" />
+    <Content Include="Content\treeView\classic\d.png" />
+    <Content Include="Content\treeView\classic\dot_for_ie.gif" />
+    <Content Include="Content\treeView\classic\style.css" />
+    <Content Include="Content\treeView\classic\throbber.gif" />
+    <Content Include="Content\treeView\default-rtl\d.gif" />
+    <Content Include="Content\treeView\default-rtl\d.png" />
+    <Content Include="Content\treeView\default-rtl\dots.gif" />
+    <Content Include="Content\treeView\default-rtl\style.css" />
+    <Content Include="Content\treeView\default-rtl\throbber.gif" />
+    <Content Include="Content\treeView\default\d.gif" />
+    <Content Include="Content\treeView\default\d.png" />
+    <Content Include="Content\treeView\default\style.css" />
+    <Content Include="Content\treeView\default\throbber.gif" />
+    <Content Include="ErrorPages\FileNotFound.htm" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\alertbox.js" />
+    <Content Include="Scripts\complex.js" />
+    <Content Include="Scripts\date.format.js" />
+    <Content Include="Scripts\datepicker_lang_es.js" />
+    <Content Include="Scripts\daterangepicker.jQuery.js" />
+    <Content Include="Scripts\highslide.js" />
+    <Content Include="Scripts\JOERP.js" />
+    <Content Include="Scripts\jqgrid\grid.base.js" />
+    <Content Include="Scripts\jqgrid\grid.common.js" />
+    <Content Include="Scripts\jqgrid\grid.filter.js" />
+    <Content Include="Scripts\jqgrid\grid.formedit.js" />
+    <Content Include="Scripts\jqgrid\grid.locale-es.js" />
+    <Content Include="Scripts\jqgrid\grid.locale-sp.js" />
+    <Content Include="Scripts\jqgrid\jquery.fmatter.js" />
+    <Content Include="Scripts\jqgrid\jquery.jqGrid.min.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.17.custom.min.js" />
+    <Content Include="Scripts\jquery-ui-latest.js" />
+    <Content Include="Scripts\jquery.alphanumeric.pack.js" />
+    <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.easing.1.3.js" />
+    <Content Include="Scripts\jquery.jstree.js" />
+    <Content Include="Scripts\jquery.layout.min.js" />
+    <Content Include="Scripts\jquery.maxlength.min.js" />
+    <Content Include="Scripts\jquery.mobile-1.0b2.min.js" />
+    <Content Include="Scripts\jquery.multiselect.js" />
+    <Content Include="Scripts\jquery.pngFix.pack.js" />
+    <Content Include="Scripts\jquery.treeview.js" />
+    <Content Include="Scripts\jquery.ui.datepicker-es.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.wjb.selectallrows.js" />
+    <Content Include="Scripts\JSLINQ.js" />
+    <Content Include="Scripts\json2.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcJQueryValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Scripts\tabscrolling\Fader.js" />
+    <Content Include="Scripts\tabscrolling\Math.uuid.js" />
+    <Content Include="Scripts\tabscrolling\TabPanel.js" />
+    <Content Include="Scripts\ui.datepicker-es.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Logistica\Views\Componente\ComponenteListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\Componente\ComponentePanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Usuario\UsuarioListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\Usuario\UsuarioPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Empleado\EmpleadoListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\Empleado\EmpleadoPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\PermisoUsuario\PermisoUsuarioListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\PermisoUsuario\PermisoUsuarioMostrar.cshtml" />
+    <Content Include="Areas\Administracion\Views\SerieDocumento\SerieDocumentoListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\SerieDocumento\SerieDocumentoPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Sucursal\SucursalPanel.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\Comercial\Views\OrdenPedido\DetalleOrdenPedido.cshtml" />
+    <Content Include="Areas\Comercial\Views\OrdenPedido\OrdenPedidoPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\PermisoRol\PermisoRolListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\PermisoRol\PermisoRolMostrar.cshtml" />
+    <Content Include="Areas\Logistica\Views\OrdenCompra\OrdenCompraListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\OrdenCompra\OrdenCompraPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\OrdenCompra\DetalleOrdenCompra.cshtml" />
+    <Content Include="Areas\Logistica\Views\Compra\CompraListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\Compra\CompraPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\Compra\DetalleCompraPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\DespachoMercaderia\DespachoMercaderiaListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\OtrasSalidas\OtrasSalidasListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\OtrosIngresos\OtrosIngresosListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\RecepcionTransferencia\RecepcionTransferenciaListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\TransferenciaMercaderia\TransferenciaMercaderiaListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\OtrasSalidas\OtrasSalidasPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\OtrosIngresos\OtrosIngresosPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Operacion\OperacionDocumentoPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\Reporte\ReporteInventarioFisico.cshtml" />
+    <Content Include="Areas\Logistica\Views\TransferenciaMercaderia\DetalleTransferenciaPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\TransferenciaMercaderia\TransferenciaMercaderiaPanel.cshtml" />
+    <Content Include="Areas\Comercial\Views\Venta\VentaListado.cshtml" />
+    <Content Include="Areas\Comercial\Views\Venta\DetalleVentaPanel.cshtml" />
+    <Content Include="Areas\Comercial\Views\Venta\VentaPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\Reporte\ReporteKardex.cshtml" />
+    <Content Include="Areas\Logistica\Views\Valorizacion\ListadoValorizacion.cshtml" />
+    <Content Include="Areas\Logistica\Views\Valorizacion\ValorizacionPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\Valorizacion\ValorizacionDetalle.cshtml" />
+    <Content Include="Areas\Logistica\Views\Reporte\Valorizaciones.cshtml" />
+    <Content Include="Areas\Logistica\Views\Reporte\ReporteProductoProveedor.cshtml" />
+    <Content Include="Areas\Logistica\Views\DistribucionMercaderia\DistribucionMercaderiaListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\Reporte\ReporteDetalleValorizacion.cshtml" />
+    <Content Include="Areas\Logistica\Views\DistribucionMercaderia\DistribucionMercaderiaPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\OtrosIngresos\DetalleOtrosIngresos.cshtml" />
+    <Content Include="Areas\Logistica\Views\OtrasSalidas\DetalleOtrasSalidas.cshtml" />
+    <Content Include="Areas\Comercial\Views\DevolucionMercaderia\DevolucionMercaderiaListado.cshtml" />
+    <Content Include="Areas\Comercial\Views\DevolucionMercaderia\DetalleDevolucionMercaderia.cshtml" />
+    <Content Include="Areas\Comercial\Views\DevolucionMercaderia\DevolucionMercaderiaPanel.cshtml" />
+    <None Include="_bin_deployableAssemblies\es\System.Web.Mvc.resources.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
+    <None Include="_bin_deployableAssemblies\es\System.Web.WebPages.resources.dll" />
+    <None Include="_bin_deployableAssemblies\es\System.Web.WebPages.Razor.resources.dll" />
+    <None Include="_bin_deployableAssemblies\es\System.Web.WebPages.Deployment.resources.dll" />
+    <None Include="_bin_deployableAssemblies\es\System.Web.WebPages.Administration.resources.dll" />
+    <None Include="_bin_deployableAssemblies\es\System.Web.Razor.resources.dll" />
+    <None Include="_bin_deployableAssemblies\es\System.Web.Helpers.resources.dll" />
+    <None Include="_bin_deployableAssemblies\es\NuGet.Core.resources.dll" />
+    <None Include="_bin_deployableAssemblies\es\Microsoft.Web.Infrastructure.resources.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Razor.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Razor.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Deployment.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Deployment.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Administration.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Razor.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.Razor.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Helpers.xml" />
+    <None Include="_bin_deployableAssemblies\System.Web.Helpers.dll" />
+    <None Include="_bin_deployableAssemblies\NuGet.Core.dll" />
+    <None Include="_bin_deployableAssemblies\Microsoft.Web.Infrastructure.xml" />
+    <None Include="_bin_deployableAssemblies\Microsoft.Web.Infrastructure.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\Administracion\Views\Shared\" />
+    <Folder Include="Areas\Comercial\Models\" />
+    <Folder Include="Areas\Comercial\Views\Shared\" />
+    <Folder Include="Areas\Finanzas\Models\" />
+    <Folder Include="Areas\Finanzas\Views\Shared\" />
+    <Folder Include="Areas\Logistica\Models\" />
+    <Folder Include="Areas\Logistica\Views\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Administracion\Views\Web.config" />
+    <Content Include="Areas\Logistica\Views\Web.config" />
+    <Content Include="Areas\Comercial\Views\Web.config" />
+    <Content Include="Areas\Administracion\Views\Sucursal\SucursalListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\Sucursal\SucursalInformacion.cshtml" />
+    <Content Include="Areas\Administracion\Views\Cargo\CargoListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\Cargo\CargoPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Tabla\ItemTablePanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Tabla\TablaListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\Tabla\TablaPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Formulario\FormularioListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\Formulario\FormularioMostrar.cshtml" />
+    <Content Include="Areas\Administracion\Views\Formulario\FormularioPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Empresa\EmpresaListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\Empresa\EmpresaPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Rol\RolListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\Rol\RolPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Operacion\OperacionListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\Operacion\OperacionPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\Impuesto\ImpuestoListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\Impuesto\ImpuestoPanel.cshtml" />
+    <Content Include="Areas\Administracion\Views\ImpuestoOperacion\ImpuestoOperacionListado.cshtml" />
+    <Content Include="Areas\Administracion\Views\ImpuestoOperacion\ImpuestoOperacionMostrar.cshtml" />
+    <Content Include="Areas\Comercial\Views\OrdenPedido\OrdenPedidoListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\Almacen\AlmacenListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\Almacen\AlmacenPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\UnidadMedida\UnidadMedidaListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\UnidadMedida\UnidadMedidaPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\Proveedor\ProveedorListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\Proveedor\ProveedorPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\Transporte\TransporteListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\Transporte\TransportePanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\Conductor\ConductorListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\Conductor\ConductorPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\Producto\PresentacionProductoPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\Producto\ProductoListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\Producto\ProductoPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\EstructuraProducto\DatoEstructuraPanel.cshtml" />
+    <Content Include="Areas\Logistica\Views\EstructuraProducto\EstructuraProductoListado.cshtml" />
+    <Content Include="Areas\Logistica\Views\EstructuraProducto\EstructuraProductoMostrar.cshtml" />
+    <Content Include="Areas\Logistica\Views\EstructuraProducto\EstructuraProductoPanel.cshtml" />
+    <Content Include="Areas\Comercial\Views\Cliente\ClienteListado.cshtml" />
+    <Content Include="Areas\Comercial\Views\Cliente\ClientePanel.cshtml" />
+    <Content Include="Areas\Comercial\Views\Vendedor\VendedorListado.cshtml" />
+    <Content Include="Areas\Comercial\Views\Vendedor\VendedorPanel.cshtml" />
+    <Content Include="Areas\Finanzas\Views\Web.config" />
+    <Content Include="Areas\Finanzas\Views\Moneda\MonedaListado.cshtml" />
+    <Content Include="Areas\Finanzas\Views\Moneda\MonedaPanel.cshtml" />
+    <Content Include="Areas\Finanzas\Views\TipoCambio\TipoCambioListado.cshtml" />
+    <Content Include="Areas\Finanzas\Views\TipoCambio\TipoCambioPanel.cshtml" />
+    <None Include="Content\images\outlines\Outlines.psd" />
+    <None Include="Content\images\outlines\Thumbs.db" />
+    <None Include="Content\images\Sorting icons.psd" />
+    <None Include="Content\treeView\apple\Thumbs.db" />
+    <None Include="Content\treeView\checkbox\Thumbs.db" />
+    <None Include="Content\treeView\classic\Thumbs.db" />
+    <None Include="Content\treeView\default-rtl\Thumbs.db" />
+    <None Include="Content\treeView\default\Thumbs.db" />
+    <Content Include="Views\Sesion\Login.cshtml" />
+    <Content Include="Views\Sesion\LoginPanel.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\ERP\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutMain.cshtml" />
+    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Business Layer\JOERP.Business.Entity\JOERP.Business.Entity.csproj">
+      <Project>{DA34B198-A4A1-4980-BD93-B64BE50D90A1}</Project>
+      <Name>JOERP.Business.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Business Layer\JOERP.Business.Helpers\JOERP.Helpers.csproj">
+      <Project>{5B91074A-B5CE-480D-845B-4FB632C61668}</Project>
+      <Name>JOERP.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Business Layer\JOERP.Business.Logic\JOERP.Business.Logic.csproj">
+      <Project>{D83A1EE1-9FAA-48AF-BF9B-ED0D8DDACE71}</Project>
+      <Name>JOERP.Business.Logic</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reportes\ReporteCompra.rdlc" />
+    <EmbeddedResource Include="Reportes\ReporteCostoSalidas.rdlc" />
+    <EmbeddedResource Include="Reportes\ReporteDetalleValorizacion.rdlc" />
+    <EmbeddedResource Include="Reportes\ReporteInventarioCosto.rdlc" />
+    <EmbeddedResource Include="Reportes\ReporteInventarioFisico.rdlc" />
+    <EmbeddedResource Include="Reportes\ReporteMovimientos.rdlc" />
+    <EmbeddedResource Include="Reportes\ReporteVenta.rdlc" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1121</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:1122/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+    <MonoDevelop>
+      <Properties>
+        <XspParameters Port="8080" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+</Project>

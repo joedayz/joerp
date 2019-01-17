@@ -1,0 +1,528 @@
+﻿@model JOERP.Business.Entity.DTO.Venta
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<div class="msgModel">
+    <div class="tips loading">
+        Por favor espere, procesando solicitud...
+    </div>
+    <div class="tips merror">
+    </div>
+    <div class="tips mexito">
+    </div>
+</div>
+<div class="MhiosysForm">
+    @using (Html.BeginForm(ViewData["Accion"].ToString(), "Venta", new { area = "Comercial" }, FormMethod.Post, new { id = "frmModel" }))
+    {
+        <table border="0" cellpadding="5" cellspacing="5">
+            <tr>
+                <td>
+                    <fieldset class="fieldset-with-legend border-round" style="margin: 10px;">
+                        <legend class="border-shadow">Información Básica : </legend>
+                        <table cellspacing="10" style="width: 98%">
+                            <tr>
+                                <td class="right" style="width: 100px;">
+                                    @Html.LabelFor(model => model.IdTipoDocumento)
+                                </td>
+                                <td style="width: 80px;">
+                                    @Html.DropDownListFor(model => model.IdTipoDocumento, new SelectList(Model.Documentos, "Id", "Nombre", Model.IdTipoDocumento), new { @style = "width: 100%" })
+                                    @Html.ValidationMessageFor(model => model.IdTipoDocumento)
+                                </td>
+                                <td class="right" style="width: 80px;">
+                                    @Html.LabelFor(model => model.IdSerieDocumento)
+                                </td>
+                                <td style="width: 90px;">
+                                    @Html.DropDownListFor(model => model.IdSerieDocumento, new List<SelectListItem>(), new { @style = "width: 100%" })
+                                    @Html.ValidationMessageFor(model => model.IdSerieDocumento)
+                                </td>
+                                <td class="right" style="width: 80px;">
+                                    @Html.LabelFor(model => model.NumeroDocumento)
+                                </td>
+                                <td style="width: 80px;">
+                                    @Html.TextBoxFor(model => model.NumeroDocumento, new { @readonly = true, @style = "width: 100%" })
+                                    @Html.ValidationMessageFor(model => model.NumeroDocumento)
+                                </td>
+                                <td class="right" style="width: 80px;">
+                                    @Html.LabelFor(model => model.FechaDocumento)
+                                </td>
+                                <td style="width: 80px;">
+                                    @Html.TextBoxFor(model => model.FechaDocumento, new { @Value = Model.FechaDocumento.ToString("dd/MM/yyyy"), @class = "fecha", @style = "width: 100%" })
+                                    @Html.ValidationMessageFor(model => model.FechaDocumento)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="right">
+                                    @Html.LabelFor(model => model.Proveedor)
+                                    @Html.HiddenFor(model => model.IdPersona)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.Proveedor, new { @style = "width: 100%" })
+                                    @Html.ValidationMessageFor(model => model.Proveedor)
+                                </td>
+                                <td class="right">
+                                    @Html.LabelFor(model => model.RazonSocial)
+                                </td>
+                                <td colspan="5">
+                                    @Html.TextBoxFor(model => model.RazonSocial, new { @style = "width: 100%" })
+                                    @Html.ValidationMessageFor(model => model.RazonSocial)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="right">
+                                    @Html.LabelFor(model => model.IdAlmacen)
+                                </td>
+                                <td colspan="3">
+                                    @Html.DropDownListFor(model => model.IdAlmacen, new SelectList(Model.Almacenes, "IdAlmacen", "Nombre", Model.IdAlmacen), new { @style = "width :100%" })
+                                    @Html.ValidationMessageFor(model => model.IdAlmacen)
+                                </td>
+                                <td class="right">
+                                    @Html.LabelFor(model => model.IdMoneda)
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(model => model.IdMoneda, new SelectList(Model.Monedas, "IdMoneda", "Nombre", Model.IdMoneda), new { @style = "width: 100%" })
+                                    @Html.ValidationMessageFor(model => model.IdMoneda)
+                                </td>
+                                <td class="right">
+                                    @Html.LabelFor(model => model.MontoTipoCambio)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.MontoTipoCambio, new { @class = "short noEsEditable", @disabled = "disabled" })
+                                    @Html.ValidationMessageFor(model => model.MontoTipoCambio)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(model => model.TipoVenta)
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(model => model.TipoVenta, new SelectList(Model.TiposVenta, "Id", "Nombre", Model.TipoVenta))
+                                </td>
+                            <tr/>
+                            <tr>
+                                <td class="right" valign="top">
+                                    @Html.LabelFor(model => model.Glosa)
+                                </td>
+                                <td colspan="7">
+                                    @Html.TextAreaFor(model => model.Glosa, new { @class = "text-area", @style = "width: 100%" })
+                                    @Html.ValidationMessageFor(model => model.Glosa)
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <fieldset class="fieldset-with-legend border-round" style="margin: 10px;">
+                        <legend class="border-shadow">Detalle de productos : </legend>
+                        <table cellpadding="0" cellspacing="0" style="width: 98%; margin: 0px 15px 15px 15px;">
+                            <tr>
+                                <td>
+                                    <input id="hidIdentificadorDetalle" type="hidden" /><br />
+                                    <div id="listadoDetalle">
+                                        <table id="tablaDetalle">
+                                        </table>
+                                        <div id="barraDetalle">
+                                        </div>
+                                    </div>
+                                    <div id="dialog-delete" style="display: none;">
+                                        Esta seguro de quitar el registro seleccionado?
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table id="tablaImpuestos" align="right" style="margin: 10px;">
+                        @for (var i = 0; i < Model.TransaccionImpuesto.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.HiddenFor(model => Model.TransaccionImpuesto[i].IdImpuesto)
+                                    @Html.HiddenFor(model => Model.TransaccionImpuesto[i].EsEditable)
+                                    @Html.HiddenFor(model => Model.TransaccionImpuesto[i].Secuencia)
+                                    @Html.HiddenFor(model => Model.TransaccionImpuesto[i].Signo)
+                                </td>
+                                <td class="right">
+                                    <label for="@Model.TransaccionImpuesto[i].Valor">@Model.TransaccionImpuesto[i].NombreImpuesto
+                                        @if (Model.TransaccionImpuesto[i].Tasa != 0)
+                                        {
+                                            <span>@string.Format(" ({0} %)", Model.TransaccionImpuesto[i].Tasa)</span>
+                                        }
+                                        :
+                                    </label>
+                                </td>
+                                <td>
+                                    @if (Model.TransaccionImpuesto[i].EsEditable)
+                                    {
+                                        @Html.TextBoxFor(model => Model.TransaccionImpuesto[i].Valor, new { @style = "width: 80px;", @class = "esEditable redondear2Decimales" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => Model.TransaccionImpuesto[i].Valor, new { @style = "width: 80px;", @class = "noEsEditable redondear2Decimales" })
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.HiddenFor(model => model.IdTransaccion)
+                    @Html.HiddenFor(model => model.IdTransaccionReferencia)
+                    @Html.HiddenFor(model => model.Estado)
+                    @Html.HiddenFor(model => model.FechaCreacion)
+                    @Html.HiddenFor(model => model.UsuarioCreacion)
+                    @Html.HiddenFor(model => model.FechaModificacion)
+                    @Html.HiddenFor(model => model.UsuarioModificacion)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: center">
+                    <br />
+                    <input type="button" value="Excel" id="btnExcel" class="buttonConstellation" />
+
+                    <input type="submit" value="Guardar" id="btnRegistrar" class="buttonConstellation" />
+                    <input type="button" value="Regresar" id="btnCancel" onclick="Cancelar()" class="buttonConstellation" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+<script type="text/javascript">
+
+    var resetFrm = false;
+
+    $(document).ready(function () {
+
+        ListarDetalle();
+
+        $('.ui-pg-input').css('width', '50px');
+        $('.ui-pg-selbox').css('width', '50px');
+        $('#dialog-alert').dialog("close");
+
+        $('.fecha').datepicker({ changeMonth: true, changeYear: true, dateFormat: 'dd/mm/yy' });
+
+        $('.noEsEditable').attr('disabled', 'disabled');
+
+        $('#IdTipoDocumento').change(function () {
+            CargarSeriesDocumento();
+            CargarNumeroDocumento();
+        });
+        CargarSeriesDocumento();
+        $('#IdSerieDocumento').val('@Model.IdSerieDocumento');
+
+        $('#IdSerieDocumento').change(function () {
+            CargarNumeroDocumento();
+        });
+        CargarNumeroDocumento();
+        if ('@Model.NumeroDocumento' != '') {
+            $('#NumeroDocumento').val('@Model.NumeroDocumento');
+        }
+
+        $("#Proveedor").autocomplete({
+            source: '@Url.Action("BuscarProveedorRuc", "Consultas", new { area = "" })' + '?funcion=2',
+            minLength: 4,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProveedor(ui.item);
+                }
+            }
+        });
+
+        $('#btnExcel').bind("click", function (e) {
+            
+            var url = '@Url.Action("ExportasVentaExcel", "Reporte", new {area = "Logistica"})' + '?id=' + $('#IdTransaccion').val() + '&formato=EXCEL';
+            window.location.href = url;
+        });
+
+        $("#RazonSocial").autocomplete({
+            source: '@Url.Action("BuscarProveedorRs", "Consultas", new { area = "" })' + '?funcion=2',
+            minLength: 4,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProveedor(ui.item);
+                }
+            }
+        });
+
+        $('#IdMoneda').change(function () {
+            BuscarTipoCambio();
+        });
+        BuscarTipoCambio();
+
+        if ($('#Estado').val() == '0') {
+            $('#btnRegistrar').hide();
+        }
+
+        $(".msgModel .tips").hide();
+        $(".msgModel .merror, .msgModel .mexito, .msgModel .loading").css({ "border-top": "none" });
+        $("#frmModel .merror").css({ "border-top": "none", "border-left": "none", "border-right": "none" });
+
+        $('#btnRegistrar').bind("click", function (e) {
+
+            if (resetFrm)
+                $(".msgModel .tips").hide();
+
+            if ($("#frmModel").validate().form()) {
+                InicializarMsg();
+
+                $('.noEsEditable').removeAttr('disabled');
+                $.post($("#frmModel").attr("action"), $("#frmModel").serialize(), function (response) {
+                    if (response.Success) {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .mexito").html(response.Message);
+                            JOERP.ShowElement(".msgModel .mexito");
+                            $('#btnRegistrar').hide();
+                            resetFrm = true;
+                            $('#btnRegistrar').hide();
+                        });
+                    } else {
+                        $(".msgModel .loading").slideUp(200, function () {
+                            $(".msgModel .merror").html(response.Message);
+                            JOERP.ShowElement(".msgModel .merror");
+                        });
+                        resetFrm = true;
+                    }
+                });
+                $('.noEsEditable').attr('disabled', 'disabled');
+            }
+            e.preventDefault();
+        });
+
+        $('#btnCancel').bind("click", function (e) {
+            JOERP.RegresarFuncion('tabla', 'listado', 'informacion');
+            e.preventDefault();
+        });
+    });
+
+    function ListarDetalle() {
+
+        var colNames = ['ID', 'Codigo', 'Producto', 'Presentación', 'Precio', 'Cantidad', 'Descuento', 'Descuento20', 'IGV', 'Sub-Total'];
+        var colModels = [
+            { name: 'IdMovimientoProducto', hidden: true, index: 'IdMovimientoProducto' },
+            { name: 'Codigo', index: 'Codigo', align: 'center', width: 30, sortable: false },
+            { name: 'NombreProducto', index: 'Nombre', align: 'center', width: 180, sortable: false },
+            { name: 'NombrePresentacion', index: 'NombrePresentacion', align: 'center', width: 50, sortable: false },
+            { name: 'PrecioBase', index: 'PrecioBase', align: 'center', width: 40, sortable: false },
+            { name: 'Cantidad', index: 'Cantidad', align: 'center', width: 40, sortable: false },
+            { name: 'MontoDescuento', index: 'MontoDescuento', align: 'center', width: 40, sortable: false },
+            { name: 'MontoDescuento2', index: 'MontoDescuento2', align: 'center', width: 40, sortable: false },
+            { name: 'IGV', index: 'IGV', align: 'center', width: 40, sortable: false },           
+            { name: 'SubTotal', index: 'SubTotal', align: 'center', width: 50, sortable: false }
+        ];
+
+        var url = '@Url.Action("ListarDetalle", "Venta")';
+        var opciones = { nuevo: true, editar: true, eliminar: true, search: false, rowNumber: 100, rowList: [100] };
+
+        if (ExisteOrdenPedido()) {
+            opciones = { nuevo: false, editar: true, eliminar: false, search: false, rowNumber: 100, rowList: [100] };
+        }
+
+        JOERP.GrillaCompleta('tablaDetalle', 'barraDetalle', 'hidIdentificadorDetalle', 'auto', 950, 'Detalle de Venta.', url, 'id',
+            colNames, colModels, 'IdMovimientoProducto', opciones, NuevoDetalle, EditarDetalle, EliminarDetalle);
+
+        $('#informacionDetalle').dialog({
+            width: 'auto',
+            resizable: false,
+            modal: true,
+            autoOpen: false,
+            open: function (type, data) { $(this).parent().appendTo("frmModel"); },
+            close: function () { }
+        });
+        SumarDetalle();
+    }
+
+    function NuevoDetalle() {
+        var url = '@Url.Action("CrearDetalle", "Venta")';
+        JOERP.MostrarInformacionPopup(url, 'tablaDetalle', 'informacionDetalle');
+    }
+
+    function EditarDetalle(rowkey) {
+        var url = '@Url.Action("ModificarDetalle", "Venta")' + '/' + rowkey;
+        JOERP.MostrarInformacionPopup(url, 'tablaDetalle', 'informacionDetalle');
+    }
+
+    function EliminarDetalle(rowkey) {
+        var url = '@Url.Action("EliminarDetalle", "Venta")';
+        var parametros = { id: rowkey };
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+            $('#refresh_tablaDetalle').trigger('click');
+            $('#informacionDetalle').dialog("close");
+            $("#informacionDetalle").html('');
+        } else {
+            alert(resultado.Message);
+        }
+
+        $('#dialog-delete').dialog("close");
+    }
+
+    function InicializarMsg() {
+        if ($(".msgModel .merror").is(":visible")) {
+            $(".msgModel .merror").slideUp(200, function () {
+                JOERP.ShowElement(".msgModel .loading");
+            });
+        } else
+            JOERP.ShowElement(".msgModel .loading");
+    }
+
+    function Cancelar() {
+
+        var sgrid = $("#tabla")[0];
+        sgrid.clearToolbar();
+        $('#tabla').trigger('reloadGrid');
+        $('#listado').show();
+        $('#informacion').hide();
+    }
+
+    function CargarSeriesDocumento() {
+        JOERP.LoadDropDownListItems('IdSerieDocumento', '@Url.Action("CargarSerieDocumento", "Consultas", new { area = "" })', { tipoDocumento: $("#IdTipoDocumento").val() });
+    }
+
+    function CargarNumeroDocumento() {
+        var url = '@Url.Action("CargarNumeroDocumento", "Consultas", new { area = "" })';
+        var parametros = { idSerieDocumento: $('#IdSerieDocumento').val() };
+        var numeroDocumento = JOERP.Ajax(url, parametros, false);
+
+        $("#NumeroDocumento").val(numeroDocumento);
+    }
+
+    function SumarDetalle(indiceColumna) {
+
+        var monto = 0.00;
+
+        $("#tablaDetalle tbody tr").each(function (f) {
+
+            $(this).find('td').each(function (c) {
+
+                if (c == indiceColumna && $(this).text() != '') {
+                    var valor = parseFloat($(this).text());
+                    monto = parseFloat(monto) + parseFloat(valor);
+                }
+            });
+        });
+        return monto;
+    }
+
+    function ObtenerValorImpuesto(idImpuestoSolicitado) {
+
+        var valor = 0.00;
+
+        $("#tablaImpuestos tr").each(function (f) {
+
+            var idImpuesto = 0;
+
+            $(this).find('td').each(function (c) {
+
+                if (c == 0) {
+
+                    var hidden = $(this).find('input');
+                    if ($(hidden).val() != undefined) {
+                        idImpuesto = $(hidden).val();
+                    }
+                }
+                if (c == 2) {
+                    if (idImpuestoSolicitado == idImpuesto) {
+                        var txt = $(this).find('input');
+                        if ($(txt).val() != undefined) {
+                            valor = parseFloat($(txt).val());
+                        }
+                    }
+                }
+            });
+        });
+        return valor;
+    }
+
+    function CalcularMontos() {
+
+        $("#tablaImpuestos tr").each(function (f) {
+
+            var valor = 0.00;
+
+            $(this).find('td').each(function (c) {
+
+                if (c == 0) {
+
+                    var hidden = $(this).find('input');
+                    if ($(hidden).val() != undefined) {
+
+                        var idImpuesto = $(hidden).val();
+                        switch (idImpuesto) {
+                            case '1': //IGV
+                                valor = SumarDetalle(9).toFixed(2);
+                                break;
+                            case '2': //AFECTO
+                                break;
+                            case '3': //INAFECTO
+                                break;
+                            case '9': //PARCIAL
+                                valor = SumarDetalle(10).toFixed(2);
+                                break;
+                            case '4': //TOTAL
+                                valor = SumarDetalle(10) + ObtenerValorImpuesto(7) - ObtenerValorImpuesto(8);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                if (c == 2) {
+
+                    var txt = $(this).find('input');
+                    if ($(txt).val() != undefined) {
+                        var esEditable = $(txt).attr('disabled') != 'disabled';
+                        if (!esEditable) {
+                            $(txt).val(valor);
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    function RedondearImpuestos() {
+
+        $(".redondear2Decimales").each(function (index, item) {
+
+            $(this).val(JOERP.Redondear($(this).val(), 2));
+        });
+    }
+
+    function CargarProveedor(item) {
+        var idPersona = item.id;
+        var documento = item.ruc;
+        var razonSocial = item.razonSocial;
+
+        $('#IdPersona').val(idPersona);
+        $('#Proveedor').val(documento);
+        $('#RazonSocial').val(razonSocial);
+    }
+
+    function ExisteOrdenPedido() {
+        return $('#IdTransaccionReferencia').val() != '';
+    }
+
+    function BuscarTipoCambio() {
+
+        var url = '@Url.Action("BuscarTipoCambio", "Consultas", new { Area = "" })';
+        var parametros = { idMoneda: $('#IdMoneda').val(), fecha: $('#FechaDocumento').val() };
+        var jsonResponse = JOERP.Ajax(url, parametros, false);
+
+        if (jsonResponse.Success == true) {
+            if (jsonResponse.Data == null) {
+                alert('No existe tipo de cambio para la fecha de la moneda seleccionada.');
+            }
+            else {
+                $('#MontoTipoCambio').val(jsonResponse.Data.ValorVenta);
+            }
+        } else {
+            alert('No existe tipo de cambio para la fecha de la moneda seleccionada.');
+        }
+    }
+    
+</script>

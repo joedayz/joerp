@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "Tablas";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    <table id="tabla">
+    </table>
+    <div id="barra">
+    </div>
+    <br />
+    <table id="tabla2">
+    </table>
+    <div id="barra2">
+    </div>
+</div>
+<input id="IdTablaSeleccionado" type="hidden"/>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<div id="infoDelete" style="display: none;">
+</div>
+ <div id="dialog-delete" style="display: none;">
+    Esta seguro de quitar el registro seleccionado?
+</div>
+<script type='text/javascript'>
+    var grilla = 'tabla';
+    var grilla2 = 'tabla2';
+
+    $(document).ready(function () {
+        $("#tabla2").hide();
+        Listar();
+        Listar2();
+        CrearDialogs();
+
+        $('#infoDelete').dialog("destroy");
+        $('#infoDelete').dialog({
+            width: 'auto',
+            resizable: false,
+            modal: true,
+            autoOpen: false,
+            open: function (type, data) { $(this).parent().appendTo("form"); },
+            close: function () { }
+
+        });
+    });
+
+    function Listar() {
+        var colNames = ['ID', 'Nombre', 'Descripcion', 'Estado'];
+        var colModels = [
+            { name: 'IdTabla', index: 'IdTabla', align: 'center', hidden: true, width: 40, searchoptions: { sopt: ['eq'] } },
+            { name: 'Nombre', index: 'Nombre', align: 'left', searchoptions: { sopt: ['cn', 'bw'] } },
+            { name: 'Descripcion', index: 'Telefono', align: 'left', searchoptions: { sopt: ['cn', 'bw'] } },
+            { name: 'NombreEstado', index: 'Estado', align: 'center', width: 50, stype: 'select', searchoptions: { sopt: ['eq'], value: 'NULL:Todo;1:Activo;0:Inactivo' } }
+        ];
+
+        var opciones = { nuevo: false, editar: false, eliminar: false, search: false, cambiarFila: true };
+
+        JOERP.Grilla(grilla, 'barra', 'hfIdentificador', 'auto', 1000, 'Mantenedor de Tablas', ' @Url.Action("ListarGeneral", "Tabla", new { area = "Administracion" })', 'id', colNames, colModels, 'IdTabla', opciones);
+
+        $("#" + grilla).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+    }
+
+    function Listar2() {
+        var colNames = ['ID', 'Nombre', 'Valor', 'Descripcion', 'Estado','IdTabla'];
+        var colModels = [
+                { name: 'IdItemTabla', index: 'IdItemTabla', align: 'center', hidden: true, width: 40, searchoptions: { sopt: ['eq']} },
+                { name: 'Nombre', index: 'Nombre', align: 'left', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'Valor', index: 'Valor', align: 'left', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'Descripcion', index: 'Descripcion', align: 'left', searchoptions: { sopt: ['cn', 'bw']} },
+                { name: 'NombreEstado', index: 'Estado', align: 'center', width: 50, stype: 'select', searchoptions: { sopt: ['eq'], value: 'it.Estado:Todo;1:Activo;0:Inactivo'} },
+                { name: 'IdTabla', index: 'IdTabla', align: 'center', hidden: true, width: 40, searchoptions: { sopt: ['eq'] } }
+        ];
+
+        var opciones = { nuevo: true, editar: true, eliminar: true, rules: true };
+        var url = '@Url.Action("ListarDetalle", "Tabla", new { area = "Administracion" })';
+
+        JOERP.GrillaCompleta(grilla2, 'barra2', 'hfIdentificador', 'auto', 1000, 'Mantenedor de ItemTablas', url, 'id', colNames, colModels, 'IdItemTabla', opciones, NuevoItemTabla, EditarItemTabla,EliminarItemTabla);
+
+        $("#" + grilla2).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+    }
+
+    function CrearDialogs() {
+
+        var arrayDialog = [{ name: "dialog-alert", height: 100, width: 280, title: "Alerta"}];
+        JOERP.CreateDialogs(arrayDialog);
+    }
+
+    //    function Nuevo() {
+    //        var url = 'Url.Action("Crear", "Tabla", new { area = "Administracion" })';
+    //        JOERP.Operacion(url);
+    //    }
+
+    //    function Editar(rowkey) {
+    //
+    //        var url = 'Url.Action("Modificar", "Tabla", new { area = "Administracion" })' + '/' + rowkey;
+    //        JOERP.Operacion(url);
+    //    }
+
+    function cambiarFila(rowkey) {
+        $('#IdTablaSeleccionado').val(rowkey);
+        var grid = jQuery("#" + grilla2);
+        grid.trigger("reloadGrid");
+    }
+
+    function GetRules() {
+        
+        var grid = jQuery("#" + grilla);
+        var rowKey = grid.getGridParam('selrow');
+        var rules = [{ field: 'IdTabla', data: rowKey}];
+        return rules;
+    }
+
+    function NuevoItemTabla() {
+
+        $("#listado2").hide();
+        var url = '@Url.Action("CrearItemTabla", "Tabla", new { area = "Administracion" })' + '/' + $("#IdTablaSeleccionado").val();
+        JOERP.Operacion(url);
+    }
+
+    function EditarItemTabla(rowkey) {
+
+        $("#listado2").hide();
+        var url = '@Url.Action("ModificarItemTabla", "Tabla", new { area = "Administracion" })' + '/' + $("#IdTablaSeleccionado").val() + '-' + rowkey;
+        JOERP.Operacion(url);
+    }
+
+
+    function EliminarItemTabla(rowkey) {
+
+        var url = '@Url.Action("EliminarItemTabla", "Tabla")';
+        var parametros = {
+            idItemTabla: rowkey, 
+            idTabla: $("#IdTablaSeleccionado").val()            
+        };
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+            $('#tabla2').trigger('reloadGrid');
+        } else {
+            $("#infoDelete").html(resultado.Message);
+            $('#infoDelete').dialog("open");
+        }
+
+        $('#dialog-delete').dialog("close");
+    }
+</script>

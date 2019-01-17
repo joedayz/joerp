@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "Reporte Detalle de Valorizaciones";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<table style="width: 1100px; padding: 10px; height: 90%; min-height: 400px;" class="MhiosysForm">
+    <tr>
+        <td>
+            <fieldset class="fieldset-with-legend border-round">
+                <legend class="border-shadow">Filtros de búsqueda : </legend>
+                <table cellspacing="10" style="margin: 20px;">
+                    <tr>
+                        <td>
+                            Compra :
+                        </td>
+                        <td>
+                            <select id="cmbCompra">
+                            </select>
+                        </td>
+                         
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="5" style="text-align: center">
+                            <input type="button" value="Buscar" id="btnBuscar" class="buttonConstellation" />
+                            <input type="button" value="Exportar Excel" id="btnExportar" class="buttonConstellation" />
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <br/>
+            <table id="tablaDetalle">
+            </table>
+        </td>
+    </tr>
+    
+   
+</table>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        CargarCombo();
+
+        CrearGrilla('#tablaDetalle');
+
+        $('#btnBuscar').bind("click", function (e) {
+            ListarReporte();
+        });
+
+        $('#btnExportar').bind("click", function (e) {
+            var url = '@Url.Action("ExportarReporteDetalleValorizacion", "Reporte")' + '?formato=EXCEL';
+            window.location.href = url;
+        });
+    });
+
+    function CargarCombo() {
+        JOERP.LoadDropDownListItems('cmbCompra', '@Url.Action("CargarCompras", "Consultas", new {Area = ""})');
+    }
+
+
+    function ListarReporte() {
+
+        $("#tablaDetalle").jqGrid("clearGridData");
+
+        var url = '@Url.Action("ReporteDetalleValorizacion", "Reporte")';
+        var parametros = {
+            idTransaccion: $('#cmbCompra option:selected').val()
+        };
+
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+
+            $.each(resultado.Data, function (index, campo) {
+                jQuery("#tablaDetalle").jqGrid('addRowData', campo.IdPresentacion, campo);
+            });
+
+        } else {
+            alert(resultado.Message);
+        }
+    }
+
+    function CrearGrilla(tabla) {
+        var columnas = ['IdTransaccion', 'Fecha Documento', 'Documento', 'Serie', 'Numero', 'Comentarios','Moneda','Tipo de Cambio','Monto'];
+        var modelo = [
+            { name: 'IdTransaccion', index: 'IdTransaccion', hidden: true, align: 'center', key: true },
+            { name: 'FechaDocumento', index: 'FechaDocumento', align: 'center' ,width: 40 },
+            { name: 'Documento', index: 'Documento', align: 'left', width: 100 },
+            { name: 'SerieDocumento', index: 'SerieDocumento', align: 'center', width: 20 },
+            { name: 'NumeroDocumento', index: 'NumeroDocumento', align: 'center', width: 30 },
+            { name: 'Comentarios', index: 'Comentarios', align: 'left', width: 200 },
+            { name: 'MonedaNombre', index: 'MonedaNombre', align: 'center', width: 30 },
+            { name: 'TipoCambio', index: 'TipoCambio', align: 'right', width: 20 },
+            { name: 'Monto', index: 'Monto', align: 'right', width: 40,formatter: 'currency', formatoptions: { decimalSeparator: ".", thousandsSeparator: "", decimalPlaces: 4} },
+
+    ];
+        tableToGrid(tabla, {
+            colNames: columnas,
+            colModel: modelo,
+            width: 1100,
+            height: 'auto',
+            datatype: 'local',
+            cellsubmit: "clientArray",
+            rowNum: 2000,
+            pgbuttons: false,
+            viewrecords: true,
+            hidegrid: false
+        });
+        $(tabla).trigger('reloadGrid');
+    }
+    
+</script>

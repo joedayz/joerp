@@ -1,0 +1,371 @@
+﻿@using JOERP.WebSite.Core.Extensiones
+@model JOERP.Business.Entity.Empleado
+@{
+    ViewBag.Title = "Información de Empleado";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<div class="msgModel">
+    <div class="tips loading">
+        Por favor espere, procesando solicitud...
+    </div>
+    <div class="tips merror">
+    </div>
+    <div class="tips mexito">
+    </div>
+</div>
+<div class="MhiosysForm">
+    @using (Html.BeginForm(ViewData["Accion"].ToString(), "Empleado", new { area = "Administracion" }, FormMethod.Post, new { id = "frmModel" }))
+    {
+        ViewContext.FormContext.ValidationSummaryId = "valSumModel";
+        Html.ValidationSummaryJQuery("Errores Encontrados", new Dictionary<string, object> { { "id", "valSumModel" }, { "class", "merror" } });
+
+        <fieldset class="fieldset-with-legend border-round">
+            <legend class="border-shadow">Información del Empleado : </legend>
+            <table border="0" cellpadding="0" cellspacing="0" class="tablelayout">
+                <tr>
+                    <td style="width: 500px;">
+                        <fieldset class="fieldset-with-legend border-round">
+                            <legend class="border-shadow">Información Básica : </legend>
+                            <table border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.Codigo)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Persona.Codigo, new { @readonly = true })
+                                        @Html.ValidationMessageFor(model => model.Persona.Codigo)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.TipoDocumento)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Persona.TipoDocumento, new SelectList(Model.Persona.TipoDocumentos, "Id", "Nombre", Model.Persona.TipoDocumento))
+                                        @Html.ValidationMessageFor(model => model.Persona.TipoDocumento)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.Documento)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Persona.Documento)
+                                        @Html.ValidationMessageFor(model => model.Persona.Documento)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.ApellidoPaterno)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Persona.ApellidoPaterno)
+                                        @Html.ValidationMessageFor(model => model.Persona.ApellidoPaterno)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.ApellidoMaterno)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Persona.ApellidoMaterno)
+                                        @Html.ValidationMessageFor(model => model.Persona.ApellidoMaterno)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.Nombres)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Persona.Nombres)
+                                        @Html.ValidationMessageFor(model => model.Persona.Nombres)
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <fieldset class="fieldset-with-legend border-round" style="vertical-align: top;">
+                            <legend class="border-shadow">Información Empresarial : </legend>
+                            <table border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.IdCargo)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.IdCargo, new SelectList(Model.Persona.Cargos, "IdCargo", "Nombre", Model.IdCargo))
+                                        @Html.ValidationMessageFor(model => model.IdCargo)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">
+                                        @Html.LabelFor(model => model.Funciones)
+                                    </td>
+                                    <td>
+                                        @for (var i = 0; i < Model.Funciones.Count; i++)
+                                        {
+                                            @Html.CheckBoxFor(model => model.Funciones[i].Seleccionado)
+                                            @Html.LabelFor(model => model.Funciones[i].IdFuncion, Model.Funciones[i].NombreFuncion)
+                                            @Html.HiddenFor(model => model.Funciones[i].IdFuncion)
+                                            <br />
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <fieldset class="fieldset-with-legend border-round">
+                            <legend class="border-shadow">Dirección : </legend>
+                            <table border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.IdDepartamento)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Persona.IdDepartamento, new SelectList(Model.Persona.Departamentos, "Id", "Nombre", Model.Persona.IdDepartamento))
+                                        @Html.ValidationMessageFor(model => model.Persona.IdDepartamento)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.IdProvincia)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Persona.IdProvincia, new List<SelectListItem>())
+                                        @Html.ValidationMessageFor(model => model.Persona.IdProvincia)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.IdUbigeo)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Persona.IdUbigeo, new List<SelectListItem>())
+                                        @Html.ValidationMessageFor(model => model.Persona.IdUbigeo)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.PersonaDireccionEnt.TipoVia)
+                                    </td>
+                                    <td class="right">
+                                        @Html.DropDownListFor(model => model.Persona.PersonaDireccionEnt.TipoVia, new SelectList(Model.Persona.TipoVias, "Id", "Nombre", Model.Persona.PersonaDireccionEnt.TipoVia))
+                                        @Html.ValidationMessageFor(model => model.Persona.PersonaDireccionEnt.TipoVia)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.PersonaDireccionEnt.NombreVia)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Persona.PersonaDireccionEnt.NombreVia)
+                                        @Html.ValidationMessageFor(model => model.Persona.PersonaDireccionEnt.NombreVia)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.PersonaDireccionEnt.Numero)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Persona.PersonaDireccionEnt.Numero)
+                                        @Html.ValidationMessageFor(model => model.Persona.PersonaDireccionEnt.Numero)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.PersonaDireccionEnt.Interior)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Persona.PersonaDireccionEnt.Interior)
+                                        @Html.ValidationMessageFor(model => model.Persona.PersonaDireccionEnt.Interior)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.PersonaDireccionEnt.TipoZona)
+                                    </td>
+                                    <td class="right">
+                                        @Html.DropDownListFor(model => model.Persona.PersonaDireccionEnt.TipoZona, new SelectList(Model.Persona.TipoZonas, "Id", "Nombre", Model.Persona.PersonaDireccionEnt.TipoZona))
+                                        @Html.ValidationMessageFor(model => model.Persona.PersonaDireccionEnt.TipoZona)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.PersonaDireccionEnt.NombreZona)
+                                    </td>
+                                    <td class="right">
+                                        @Html.EditorFor(model => model.Persona.PersonaDireccionEnt.NombreZona)
+                                        @Html.ValidationMessageFor(model => model.Persona.PersonaDireccionEnt.NombreZona)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.PersonaDireccionEnt.Referencia)
+                                    </td>
+                                    <td class="right">
+                                        @Html.EditorFor(model => model.Persona.PersonaDireccionEnt.Referencia)
+                                        @Html.ValidationMessageFor(model => model.Persona.PersonaDireccionEnt.Referencia)
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <fieldset class="fieldset-with-legend border-round">
+                            <legend class="border-shadow">Información Personal : </legend>
+                            <table border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.EstadoCivil)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Persona.EstadoCivil, new SelectList(Model.Persona.EstadoCiviles, "Id", "Nombre", Model.Persona.EstadoCivil))
+                                        @Html.ValidationMessageFor(model => model.Persona.EstadoCivil)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.Sexo)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Persona.SexoC, new SelectList(Model.Persona.Sexos, "Id", "Nombre", Model.Persona.SexoC))
+                                        @Html.ValidationMessageFor(model => model.Persona.SexoC)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.FechaNacimiento)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Persona.FechaNacimiento)
+                                        @Html.ValidationMessageFor(model => model.Persona.FechaNacimiento)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.Telefono)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Persona.Telefono)
+                                        @Html.ValidationMessageFor(model => model.Persona.Telefono)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.Celular)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Persona.Celular)
+                                        @Html.ValidationMessageFor(model => model.Persona.Celular)
+                                    </td>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.Email)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.Persona.Email)
+                                        @Html.ValidationMessageFor(model => model.Persona.Email)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="right">
+                                        @Html.LabelFor(model => model.Persona.Estado)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Persona.Estado, new SelectList(Model.Persona.Estados, "Id", "Nombre", Model.Persona.Estado))
+                                        @Html.ValidationMessageFor(model => model.Persona.Estado)
+                                    </td>
+                                    <td class="right">
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.HiddenFor(model => model.IdEmpleado)
+                        @Html.HiddenFor(model => model.FechaCreacion)
+                        @Html.HiddenFor(model => model.UsuarioCreacion)
+                        @Html.HiddenFor(model => model.FechaModificacion)
+                        @Html.HiddenFor(model => model.UsuarioModificacion)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: center">
+                        <br />
+                        <input type="submit" value="Guardar" id="btnRegistrar" class="buttonConstellation" />
+                        <input type="reset" value="Limpiar" id="btnReset" class="buttonConstellation" />
+                        <input type="button" value="Regresar" id="btnCancel" onclick="Cancelar()" class="buttonConstellation" />
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    }
+</div>
+<script type="text/javascript">
+    var resetFrm = false;
+    $(document).ready(function() {
+        $("#Persona_Nombres").alpha({allow: " "});
+        $("#Persona_ApellidoPaterno").alpha({allow: " "});
+        $("#Persona_ApellidoMaterno").alpha({allow: " "});
+        $("#Persona_Telefono").numeric();
+        $("#Persona_Celular").numeric();
+        $("#Persona_PersonaDireccionEnt_Numero").numeric();
+        $("#Persona_Documento").numeric();
+        $("#Persona_Direccion").val( $("#PersonaDireccionEnt_TipoVia option:selected").text()+' '+$("#PersonaDireccionEnt_NombreVia").val()+' #'+$("#PersonaDireccionEnt_Numero").val()+' Int.:'+$("#PersonaDireccionEnt_Interior").val() );
+        
+        $('#Persona_FechaNacimiento').datepicker();
+        $('#Persona_FechaNacimiento').maxlength({ max: 10, feedbackText: '' });
+        $("#Persona_IdDepartamento").change(function() {
+            JOERP.LoadDropDownListItems('Persona_IdProvincia', '@Url.Action("GetProvincias", "Ubigeo", new { area = "Administracion" })'    , { idDepartamento: $(this).val() });
+        });
+        JOERP.LoadDropDownListItems('Persona_IdProvincia', '@Url.Action("GetProvincias", "Ubigeo", new { area = "Administracion" })', { idDepartamento: @Model.Persona.IdDepartamento }, @Model.Persona.IdProvincia );
+
+        $("#Persona_IdProvincia").change(function() {
+            JOERP.LoadDropDownListItems('Persona_IdUbigeo', '@Url.Action("GetDistritos", "Ubigeo", new { area = "Administracion" })', { idDepartamento: $('#Persona_IdDepartamento').val(), idProvincia: $(this).val() });
+        });
+        JOERP.LoadDropDownListItems('Persona_IdUbigeo', '@Url.Action("GetDistritos", "Ubigeo", new { area = "Administracion" })', { idDepartamento: @Model.Persona.IdDepartamento , idProvincia: @Model.Persona.IdProvincia }, @Model.Persona.IdUbigeo );
+
+        $(".msgModel .tips").hide();
+        $(".msgModel .merror, .msgModel .mexito, .msgModel .loading").css({ "border-top": "none" });
+        $("#frmModel .merror").css({ "border-top": "none", "border-left": "none", "border-right": "none" });
+
+        $('#btnRegistrar').bind("click", function(e) {
+            
+            if (resetFrm)
+                $(".msgModel .tips").hide();
+
+            if ($("#frmModel").validate().form()) {
+                InicializarMsg();
+                $.post($("#frmModel").attr("action"), $("#frmModel").serialize(), function(response) {
+                    if (response.Success) {
+                        $(".msgModel .loading").slideUp(200, function() {
+                            $(".msgModel .mexito").html(response.Message);
+                            JOERP.ShowElement(".msgModel .mexito");
+                            resetFrm = true;
+                            $('#btnRegistrar').hide("slow");
+                            $('#btnReset').hide("slow");
+                        });
+                    } else {
+                        $(".msgModel .loading").slideUp(200, function() {
+                            $(".msgModel .merror").html(response.Message);
+                            JOERP.ShowElement(".msgModel .merror");
+                        });
+                        resetFrm = true;
+                    }
+                });
+            }
+            e.preventDefault();
+        });
+    });
+
+    function InicializarMsg() {
+        if ($(".msgModel .merror").is(":visible")) {
+            $(".msgModel .merror").slideUp(200, function () {
+                JOERP.ShowElement(".msgModel .loading");
+            });
+        } else
+            JOERP.ShowElement(".msgModel .loading");
+    }
+
+    function Cancelar() {
+
+        var sgrid = $("#tabla")[0];
+        sgrid.clearToolbar();
+        $('#tabla').trigger('reloadGrid');
+        $('#listado').show();
+        $('#informacion').hide();
+    }
+
+</script>

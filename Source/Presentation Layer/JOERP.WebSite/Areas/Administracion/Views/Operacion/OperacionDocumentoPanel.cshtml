@@ -1,0 +1,125 @@
+﻿@model JOERP.Business.Entity.OperacionDocumento
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<div class="msgModel1">
+    <div class="tips loading">
+        Por favor espere, procesando solicitud...
+    </div>
+    <div class="tips merror">
+    </div>
+    <div class="tips mexito">
+    </div>
+</div>
+<div class="MhiosysForm">
+    @using (Html.BeginForm(ViewData["Accion"].ToString(), "Operacion", new { area = "Administracion" }, FormMethod.Post, new { id = "frmModel2" }))
+    {
+        <fieldset class="fieldset-with-legend border-round">
+            <legend class="border-shadow">Información de Documento Relacionado : </legend>
+            <table border="0" cellpadding="0" cellspacing="0" class="tablelayout">
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.TipoDocumento)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.TipoDocumento, new SelectList(Model.TipoDocumentos, "Id", "Nombre", Model.TipoDocumento))
+                        @Html.ValidationMessageFor(model => model.TipoDocumento)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Orden)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Orden)
+                        @Html.ValidationMessageFor(model => model.Orden)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Posicion)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Posicion)
+                        @Html.ValidationMessageFor(model => model.Posicion)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        @Html.LabelFor(model => model.Estado)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Estado)
+                        @Html.ValidationMessageFor(model => model.Estado)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.HiddenFor(model => model.IdOperacion)
+                    </td>
+                    <td colspan="3">
+                        <br />
+                        <input type="submit" value="Guardar" id="btnRegistrarP" class="buttonConstellation" />
+                        <input type="button" value="Regresar" id="btnCancelP" onclick="CancelarDoc()"
+                            class="buttonConstellation" />
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    }
+</div>
+<script type="text/javascript">
+    var resetFrmD = false;
+
+    $(document).ready(function () {
+
+        $(".msgModel1 .tips").hide();
+        $(".msgModel1 .merror, .msgModel1 .mexito, .msgModel1 .loading").css({ "border-top": "none" });
+        $("#frmModel2 .merror").css({ "border-top": "none", "border-left": "none", "border-right": "none" });
+
+        $('#btnRegistrarP').bind("click", function (e) {
+
+            if (resetFrmD)
+                $(".msgModel1 .tips").hide();
+
+            if ($("#frmModel2").validate().form()) {
+                InicializarMsgDoc();
+                $.post($("#frmModel2").attr("action"), $("#frmModel2").serialize(), function (response) {
+                    if (response.Success) {
+                        $(".msgModel1 .loading").slideUp(200, function () {
+                            $(".msgModel1 .mexito").html(response.Message);
+                            JOERP.ShowElement(".msgModel1 .mexito");
+                            resetFrmD = true;
+                            $('#btnRegistrarP').hide("slow");
+                        });
+                    } else {
+                        $(".msgModel1 .loading").slideUp(200, function () {
+                            $(".msgModel1 .merror").html(response.Message);
+                            JOERP.ShowElement(".msgModel1 .merror");
+                        });
+                        resetFrmD = true;
+                    }
+                });
+            }
+            e.preventDefault();
+        });
+    });
+
+    function InicializarMsgDoc() {
+
+        if ($(".msgModel1 .merror").is(":visible")) {
+            $(".msgModel1 .merror").slideUp(200, function () {
+                JOERP.ShowElement(".msgModel1 .loading");
+            });
+        } else
+            JOERP.ShowElement(".msgModel1 .loading");
+    }
+
+    function CancelarDoc() {
+
+        $('#refresh_tablaDoc').trigger('click');
+        $('#listadoDoc').show();
+        $('#informacionDoc').hide();
+        $('#btnLimpiarDoc').trigger('click');
+    }
+
+</script>

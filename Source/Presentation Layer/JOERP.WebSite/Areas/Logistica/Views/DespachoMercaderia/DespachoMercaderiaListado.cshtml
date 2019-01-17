@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Despacho de Mercaderia";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    <table id="tabla">
+    </table>
+    <div id="barra">
+    </div>
+</div>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<div id="informacionDetalle" title="Detalle de Despacho" style="display: none;">
+</div>
+<div id="divBuscadorProductos" title="Buscador de Productos" style="display: none;">
+    <fieldset>
+        <legend style="font-size: 9pt;">Información de búsqueda : </legend>
+     
+    </fieldset>
+</div>
+<div id="dialog-delete" style="display: none;">
+    Esta seguro de quitar el registro seleccionado?
+</div>
+
+<script type='text/javascript'>
+    var grilla = 'tabla';
+
+    $(document).ready(function () {
+        Listar();
+        CrearDialogs();
+    });
+
+    function Listar() {
+        var colNames = ['ID', 'Documento', 'Fecha Emisión', 'Documento Relacionado', 'Estado'];
+        var colModels = [
+          { name: 'IdTransaccion', index: 'IdTransaccion', width: 90, editable: false, align: 'center', search: false }
+        , { name: 'Documento', index: 'Documento', width: 200, editable: true, align: 'center', sortable: true, search: true, searchoptions: { sopt: ['bw', 'bn']} }
+        , { name: 'FechaDocumento', index: 'FechaDocumento', width: 300, editable: true, align: 'center', sortable: false, search: true }
+        , { name: 'DocumentoRelacionado', index: 'DocumentoRelacionado', width: 100, editable: false, align: 'center', sortable: false, search: false }
+        , { name: 'Estado', index: 'Estado', width: 100, editable: false, align: 'center', sortable: false, search: true, stype: 'select', searchoptions: { sopt: ['eq'], value: 'it.Estado:Todo;1:Activo;0:Inactivo'} }
+      ];
+
+        var opciones = { nuevo: true, editar: true, eliminar: false, rules: true };
+        var url = ' @Url.Action("Listar", "DespachoMercaderia", new { area = "Logistica" })';
+        
+        JOERP.Grilla(grilla, 'barra', 'hfIdentificador', 'auto', 1000, 'Listado de Despacho de Mercadería', url, 'id', colNames, colModels, 'IdTransaccion', opciones);
+
+        $("#" + grilla).filterToolbar({ searchOnEnter: true, stringResult: true, defaultSearch: "cn" });
+    }
+
+    function CrearDialogs() {
+        var arrayDialog = [{ name: "dialog-alert", height: 100, width: 280, title: "Alerta"}];
+        JOERP.CreateDialogs(arrayDialog);
+    }
+
+    function GetRules() {
+
+        var rules = [{ field: 'IdOperacion', data: @ViewData["Operacion"] }];
+        return rules;
+    }
+
+    function Nuevo() {
+
+        var url = '@Url.Action("Crear", "DespachoMercaderia", new { area = "Logistica" })';
+        JOERP.Operacion(url);
+    }
+
+    function Editar(rowkey) {
+        var url = '@Url.Action("Modificar", "DespachoMercaderia", new { area = "Logistica" })' + '/' + rowkey;
+        JOERP.Operacion(url);
+    }
+</script>

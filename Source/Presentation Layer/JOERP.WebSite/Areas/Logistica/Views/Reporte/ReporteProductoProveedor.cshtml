@@ -1,0 +1,261 @@
+﻿@{
+    ViewBag.Title = "Reporte Producto Proveedor";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<table style="width: 1100px; padding: 10px; height: 90%; min-height: 400px;" class="MhiosysForm">
+    <tr>
+        <td>
+            <fieldset class="fieldset-with-legend border-round">
+                <legend class="border-shadow">Filtros de búsqueda : </legend>
+                <table cellspacing="10" style="margin: 20px;">
+                   <tr>
+                        <td>
+                            Linea :
+                        </td>
+                        <td style="width: 30px;">
+                        </td>
+                        <td>
+                            Sub Linea :
+                        </td>
+                        <td style="width: 30px;">
+                        </td>
+                        <td>
+                            Categoria :
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="cboLinea">
+                            </select>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <select id="cboSubLinea">
+                            </select>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <select id="cboCategoria">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Codigo :
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            Producto :
+                        </td>
+                        <td style="width: 30px;">
+                        </td>                        
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="txtCodigo" type="text" />
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <input id="txtProducto" type="text" />
+                        </td>
+                        <td>
+                        </td>                       
+                    </tr>
+                    <tr>
+                        <td>
+                            RUC :
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            Razón Social :
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" id="txtRUC" />
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <input type="text" id="txtRazonSocial" />
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="5" style="text-align: center">
+                            <input type="hidden" id="txtIdProducto" value="0"/>
+                            <input type="hidden" id="txtIdProveedor" value="0"/>
+
+                            <input type="button" value="Buscar" id="btnBuscar" class="buttonConstellation" />
+                            <input type="button" value="Exportar Excel" id="btnExportar" class="buttonConstellation" />
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <br/>
+            <table id="tablaReporte">
+            </table>
+        </td>
+    </tr>
+    
+   
+</table>
+
+<script type="text/javascript">
+
+    $(function () {
+
+
+        $("#txtCodigo").autocomplete({
+            source: '@Url.Action("BuscarProductoAutocompletarByCodigo", "Consultas", new { area = "" })',
+            minLength: 2,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProducto(ui.item);
+                }
+            }
+        });
+
+        $("#txtProducto").autocomplete({
+            source: '@Url.Action("BuscarProductoAutocompletar", "Consultas", new { area = "" })',
+            minLength: 2,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProducto(ui.item);
+                }
+            }
+        });
+
+
+        $("#txtRUC").autocomplete({
+            source: '@Url.Action("BuscarProveedorRuc", "Consultas", new { area = "" })'+ '?funcion=3',
+            minLength: 2,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProveedor(ui.item);
+                }
+            }
+        });
+
+        $("#txtRazonSocial").autocomplete({
+            source: '@Url.Action("BuscarProveedorRs", "Consultas", new { area = "" })' + '?funcion=3',
+            minLength: 2,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProveedor(ui.item);
+                }
+            }
+        });
+
+        CrearGrilla("#tablaReporte");
+       
+
+        JOERP.LoadDropDownListItems('cboLinea', '@Url.Action("ListarLineas", "Producto")', null, null);
+
+        $("#cboLinea").change(function () {
+            JOERP.LoadDropDownListItems('cboSubLinea', '@Url.Action("ListarSubLineas", "Producto", new { area = "Logistica" })', { idLinea: $("#cboLinea").val() });
+        });
+        JOERP.LoadDropDownListItems('cboSubLinea', '@Url.Action("ListarSubLineas", "Producto", new { area = "Logistica" })', { idLinea: $("#cboLinea").val() });
+
+        $("#cboSubLinea").change(function () {
+            JOERP.LoadDropDownListItems('cboCategoria', '@Url.Action("ListarCategorias", "Producto", new { area = "Logistica" })', { subLinea: $("#cboSubLinea").val() });
+        });
+        JOERP.LoadDropDownListItems('cboCategoria', '@Url.Action("ListarCategorias", "Producto", new { area = "Logistica" })', { subLinea: $("#cboSubLinea").val(), idDatoEstructura: $("#cboCategoria").val() });
+
+      
+        $('#btnBuscar').bind("click", function (e) {
+            ListarReporte();
+        });
+    });
+
+    function CargarProducto(item) {
+
+        var codigo = item.codigo;
+        var nombre = item.nombre;
+        var id = item.id;
+
+        $('#txtProducto').val(nombre);
+        $('#txtCodigo').val(codigo);
+        $('#txtIdProducto').val(id);
+    }
+
+    function CargarProveedor(item) {
+
+        var ruc = item.ruc;
+        var razonSocial = item.razonSocial;
+        var id = item.id;
+
+        $('#txtRUC').val(ruc);
+        $('#txtRazonSocial').val(razonSocial);
+        $('#txtIdProveedor').val(id);
+    }
+    
+    function ListarReporte() {
+
+        debugger;
+        $("#tablaReporte").jqGrid("clearGridData");
+
+        var url = '@Url.Action("ReporteProductoProveedor", "Reporte")';
+        var parametros = {
+            linea: $('#cboLinea').val(),
+            sublinea: $('#cboSubLinea').val(),
+            categoria: $('#cboCategoria').val(),
+            idProveedor: $('#txtIdProveedor').val(),
+            idProducto: $('#txtIdProducto').val()
+        };
+
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+
+            $.each(resultado.Data, function (index, campo) {
+                jQuery("#tablaReporte").jqGrid('addRowData', campo.IdPresentacion, campo);
+            });
+
+        } else {
+            alert(resultado.Message);
+        }
+    }
+    
+    function CrearGrilla(tabla) {
+        var columnas = ['Codigo', 'Codigo Alterno', 'Producto', 'Linea', 'SubLiena', 'Categoría','Proveedor','Precio'];
+        var modelo = [
+            { name: 'Codigo', index: 'Codigo',  align: 'center', width: 50 },
+            { name: 'CodigoAlterno', index: 'CodigoAlterno', align: 'center', width: 60 },
+            { name: 'Producto', index: 'Producto', align: 'right', width: 200 },
+            { name: 'Linea', index: 'Linea', align: 'left', width: 70 },
+            { name: 'SubLinea', index: 'SubLinea', align: 'left', width: 80 },
+            { name: 'Categoria', index: 'Categoria', align: 'left', width: 70 },
+            { name: 'Proveedor', index: 'Proveedor', align: 'left', width: 80 },
+            { name: 'Precio', index: 'Precio', align: 'right', width: 50 },
+            
+
+    ];
+        tableToGrid(tabla, {
+            colNames: columnas,
+            colModel: modelo,
+            width: 1100,
+            height: 'auto',
+            datatype: 'local',
+            cellsubmit: "clientArray",
+            rowNum: 2000,
+            pgbuttons: false,
+            viewrecords: true,
+            hidegrid: false
+        });
+        $(tabla).trigger('reloadGrid');
+    }
+    
+</script>

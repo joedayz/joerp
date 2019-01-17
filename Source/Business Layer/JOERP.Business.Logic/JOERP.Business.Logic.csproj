@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D83A1EE1-9FAA-48AF-BF9B-ED0D8DDACE71}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JOERP.Business.Logic</RootNamespace>
+    <AssemblyName>JOERP.Business.Logic</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlmacenBL.cs" />
+    <Compile Include="CargoBL.cs" />
+    <Compile Include="CompraBL.cs" />
+    <Compile Include="DatoEstructuraBL.cs" />
+    <Compile Include="DatoEstructuraProductoBL.cs" />
+    <Compile Include="DespachoBL.cs" />
+    <Compile Include="DevolucionMercaderiaBL.cs" />
+    <Compile Include="DistribucionMercaderiaBL.cs" />
+    <Compile Include="EmpleadoBL.cs" />
+    <Compile Include="EmpresaBL.cs" />
+    <Compile Include="EstructuraProductoBL.cs" />
+    <Compile Include="FormularioBL.cs" />
+    <Compile Include="IBaseLogic.cs" />
+    <Compile Include="ImpuestoBL.cs" />
+    <Compile Include="IngresoOtroConceptoBL.cs" />
+    <Compile Include="IngresoTransferenciaAlmacenBL.cs" />
+    <Compile Include="ItemTablaBL.cs" />
+    <Compile Include="KardexBL.cs" />
+    <Compile Include="MonedaBL.cs" />
+    <Compile Include="MovimientoProductoBL.cs" />
+    <Compile Include="MovimientoProductoStockBL.cs" />
+    <Compile Include="OperacionBL.cs" />
+    <Compile Include="OperacionDocumentoBL.cs" />
+    <Compile Include="OperacionImpuestoBL.cs" />
+    <Compile Include="OrdenCompraBL.cs" />
+    <Compile Include="OrdenPedidoBL.cs" />
+    <Compile Include="PermisoRolBL.cs" />
+    <Compile Include="PermisoUsuarioBL.cs" />
+    <Compile Include="PersonaBL.cs" />
+    <Compile Include="PersonaDireccionBL.cs" />
+    <Compile Include="PersonaFuncionBL.cs" />
+    <Compile Include="PresentacionBL.cs" />
+    <Compile Include="ProductoBL.cs" />
+    <Compile Include="ProductoComponenteBL.cs" />
+    <Compile Include="ProductoStockBL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReporteBL.cs" />
+    <Compile Include="RolBL.cs" />
+    <Compile Include="SalidaOtroConceptoBL.cs" />
+    <Compile Include="SalidaTransferenciaAlmacenBL.cs" />
+    <Compile Include="SerieDocumentoBL.cs" />
+    <Compile Include="SucursalBL.cs" />
+    <Compile Include="TablaBL.cs" />
+    <Compile Include="TipoCambioBL.cs" />
+    <Compile Include="TransaccionDocumentoBL.cs" />
+    <Compile Include="TransaccionImpuestoBL.cs" />
+    <Compile Include="UbigeoBL.cs" />
+    <Compile Include="UnidadMedidaBL.cs" />
+    <Compile Include="UsuarioBL.cs" />
+    <Compile Include="UsuarioSucursalBL.cs" />
+    <Compile Include="ValorizacionBL.cs" />
+    <Compile Include="VentaBL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data Access Layer\JOERP.DataAccess\JOERP.DataAccess.csproj">
+      <Project>{EBED0499-CBDD-4494-B5B1-57ECFD74B02D}</Project>
+      <Name>JOERP.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JOERP.Business.Entity\JOERP.Business.Entity.csproj">
+      <Project>{DA34B198-A4A1-4980-BD93-B64BE50D90A1}</Project>
+      <Name>JOERP.Business.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JOERP.Business.Helpers\JOERP.Helpers.csproj">
+      <Project>{5B91074A-B5CE-480D-845B-4FB632C61668}</Project>
+      <Name>JOERP.Helpers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,286 @@
+﻿@{
+    ViewBag.Title = "Reporte de Kardex";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<table style="width: 1100px; padding: 10px; height: 90%; min-height: 400px;" class="MhiosysForm">
+    <tr>
+        <td>
+            <fieldset class="fieldset-with-legend border-round">
+                <legend class="border-shadow">Filtros de búsqueda : </legend>
+                <table cellspacing="10" style="margin: 20px;">
+                    <tr>
+                        <td style="width: 60px;">
+                            Sucursal :
+                        </td>
+                        <td colspan="4">
+                            <select id="cboSucursal" style="width: 250px;">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Producto :
+                        </td>
+                        <td>
+                            <input type="text" id="txtCodigo" style="width: 80px;" />
+                        </td>
+                        <td colspan="2">
+                            <input type="text" id="txtProducto" style="width: 300px;" />
+                        </td>
+                        <td>
+                            <select id="cboPresentacion" style="width: 100px;">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Desde :
+                        </td>
+                        <td>
+                            <input type="text" id="txtDesde" style="width: 80px;" />
+                        </td>
+                        <td style="width: 50px;">
+                            Hasta :
+                        </td>
+                        <td>
+                            <input type="text" id="txtHasta" style="width: 80px;" />
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td colspan="4">
+                            <br />
+                            <input type="hidden" id="txtIdProducto" />
+                            <input type="button" value="Buscar" id="btnBuscar" class="buttonConstellation" />
+                            <input type="button" value="Exportar Excel" id="btnExportar" class="buttonConstellation" />
+                            <input type="button" value="Solucionar >.<" id="btnResolver" class="buttonConstellation" />
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <br />
+            <table id="tablaReporteCabecera">
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <br />
+            <table id="tablaReporteDetalle">
+            </table>
+        </td>
+    </tr>
+</table>
+<script type='text/javascript'>
+
+    $(function () {
+
+        $('#txtDesde').datepicker({ changeMonth: true, changeYear: true, dateFormat: 'dd/mm/yy' });
+        $('#txtHasta').datepicker({ changeMonth: true, changeYear: true, dateFormat: 'dd/mm/yy' });
+
+        $("#txtCodigo").autocomplete({
+            source: '@Url.Action("BuscarProductoAutocompletarByCodigo", "Consultas", new { area = "" })',
+            minLength: 4,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProducto(ui.item);
+                }
+            }
+        });
+
+        $("#txtProducto").autocomplete({
+            source: '@Url.Action("BuscarProductoAutocompletar", "Consultas", new { area = "" })',
+            minLength: 4,
+            select: function (event, ui) {
+                if (ui.item) {
+                    CargarProducto(ui.item);
+                }
+            }
+        });
+
+        CrearGrillaCabecera("#tablaReporteCabecera");
+
+        JOERP.LoadDropDownListItems('cboSucursal', ' @Url.Action("ListarSucursales", "Sucursal", new { area = "Administracion" })');
+
+        $('#btnBuscar').bind("click", function (e) {
+            ListarReporte();
+        });
+
+        $('#btnExportar').bind("click", function (e) {
+
+            var url = '@Url.Action("ReporteKardex", "Reporte")' + '?' +
+                'linea=' + $('#cboLinea').val() +
+                '&sublinea=' + $('#cboSubLinea').val() +
+                '&categoria=' + $('#cboCategoria').val() +
+                '&codigoProducto=' + $('#txtCodigo').val() +
+                '&sucursal=' + $('#cboSucursal').val() +
+                '&almacen=' + $('#cboAlmacen').val() +
+                '&fechaVencimiento=' + $('#txtFechaVencimiento').val();
+
+            window.location.href = url;
+        });
+
+
+        $('#btnResolver').bind("click", function (e) {
+            var url = '@Url.Action("Resolver", "Venta", new { area = "Comercial"})';
+
+            var resultado = JOERP.Ajax(url, null, false);
+
+            if (resultado.Success) {
+                alert("bien");
+
+            } else {
+                alert("no se hizo");
+            }
+        });
+    });
+
+    function ListarReporte() {
+
+        $("#tablaReporteCabecera").jqGrid("clearGridData");
+        var url = '@Url.Action("ReporteKardex", "Reporte")';
+        var parametros = {
+
+            idEmpresa: 1,
+            idSucursal: parseInt($('#cboSucursal').val()),
+            idProducto: parseInt($('#txtIdProducto').val()),
+            idPresentacion: parseInt($('#cboPresentacion').val()),
+            fechaInicio: $('#txtDesde').val(),
+            fechaFin: $('#txtHasta').val()
+        };
+
+        var resultado = JOERP.Ajax(url, parametros, false);
+        if (resultado.Success) {
+
+            $.each(resultado.Data, function (index, campo) {
+                jQuery("#tablaReporteCabecera").jqGrid('addRowData', campo.IdTransaccion, campo);
+            });
+
+        } else {
+            alert(resultado.Message);
+        }
+    }
+
+    function ListarReporteDetalle(idPresentacion) {
+        $("#tablaReporteDetalle").jqGrid("clearGridData");
+
+        var url = '@Url.Action("InventarioFisicoDetalle", "Reporte")';
+        var parametros = {
+            linea: $('#cboLinea').val(),
+            sublinea: $('#cboSubLinea').val(),
+            categoria: $('#cboCategoria').val(),
+            codigoProducto: $('#txtCodigo').val(),
+            sucursal: $('#cboSucursal').val(),
+            almacen: $('#cboAlmacen').val(),
+            fechaVencimiento: $('#txtFechaVencimiento').val(),
+            idPresentacion: idPresentacion
+        };
+
+        var resultado = JOERP.Ajax(url, parametros, false);
+
+        if (resultado.Success) {
+
+            $.each(resultado.Data, function (index, campo) {
+                jQuery("#tablaReporteDetalle").jqGrid('addRowData', index, campo);
+            });
+
+        } else {
+            alert(resultado.Message);
+        }
+    }
+
+    function CrearGrillaCabecera(tabla) {
+        var columnas = ['IdTransaccion', 'FechaProceso', 'F.E.', 'Tipo Doc.', 'Serie', 'Nro. Doc.', 'Operación',
+        'Cant. Ingreso', 'C.U. Ingreso', 'C.T. Ingreso', 'Cant. Salida', 'C.U. Salida', 'C.T. Salida', 'Cant. Saldo',
+        'C.U. Saldo', 'C.T. Saldo', 'Estado'];
+        var modelo = [
+            { name: 'IdTransaccion', index: 'IdTransaccion', hidden: true, key: true },
+            { name: 'FechaProceso', index: 'FechaProceso', hidden: true },
+            { name: 'FechaEmision', index: 'FechaEmision', align: 'center', width: 50 },
+            { name: 'TipoDocumento', index: 'TipoDocumento', align: 'center', width: 50 },
+            { name: 'SerieDocumento', index: 'SerieDocumento', align: 'center', width: 40 },
+            { name: 'NumeroDocumento', index: 'NumeroDocumento', align: 'center', width: 60 },
+            { name: 'TipoOperacion', index: 'TipoOperacion', align: 'left', width: 60 },
+            { name: 'CantidadIngreso', index: 'CantidadIngreso', align: 'right', width: 60 },
+            { name: 'CostoUnitarioIngreso', index: 'CostoUnitarioIngreso', align: 'right', width: 60 },
+            { name: 'CostoTotalIngreso', index: 'CostoTotalIngreso', hidden: true, align: 'right', width: 60 },
+            { name: 'CantidadSalida', index: 'CantidadSalida', align: 'right', width: 60 },
+            { name: 'CostoUnitarioSalida', index: 'CostoUnitarioSalida', align: 'right', width: 60 },
+            { name: 'CostoTotalSalida', index: 'CostoTotalSalida', hidden: true, align: 'right', width: 60 },
+            { name: 'CantidadSaldo', index: 'CantidadSaldo', align: 'right', width: 60 },
+            { name: 'CostoUnitarioSaldo', index: 'CostoUnitarioSaldo', align: 'right', width: 60 },
+            { name: 'CostoTotalSaldo', index: 'CostoTotalSaldo', hidden: true, align: 'right', width: 60 },
+            { name: 'Estado', index: 'Estado', align: 'center', width: 40 }
+        ];
+        tableToGrid(tabla, {
+            colNames: columnas,
+            colModel: modelo,
+            width: 1100,
+            height: 'auto',
+            datatype: 'local',
+            cellsubmit: "clientArray",
+            rowNum: 2000,
+            pgbuttons: false,
+            viewrecords: true,
+            hidegrid: false
+        });
+        $(tabla).trigger('reloadGrid');
+    }
+
+    function CrearGrillaDetalle(tabla) {
+        var columnas = ['ID', 'Presentacion', 'Lote', 'Serie', 'Stock', 'Fecha Vencimiento'];
+        var modelo = [
+            { name: 'IdPresentacion', index: 'IdPresentacion', hidden: true, align: 'center' },
+            { name: 'Presentacion', index: 'Presentacion', align: 'left', width: 100 },
+            { name: 'Lote', index: 'Lote', align: 'left', width: 100 },
+            { name: 'Serie', index: 'Serie', align: 'left', width: 100 },
+            { name: 'Stock', index: 'Stock', align: 'left', width: 100 },
+            { name: 'FechaVencimiento', index: 'FechaVencimiento', align: 'left', width: 100 },
+        ];
+        tableToGrid(tabla, {
+            colNames: columnas,
+            colModel: modelo,
+            width: 1200,
+            height: 'auto',
+            datatype: 'local',
+            cellsubmit: "clientArray",
+            rowNum: 2000,
+            pgbuttons: false,
+            viewrecords: true,
+            viewGrid: true,
+
+            hidegrid: false
+        });
+        $(tabla).trigger('reloadGrid');
+    }
+
+    function CargarProducto(item) {
+
+        var codigo = item.codigo;
+        var nombre = item.nombre;
+        var idProducto = item.id;
+
+        $('#txtProducto').val(nombre);
+        $('#txtCodigo').val(codigo);
+        $('#txtIdProducto').val(idProducto);
+
+        var url = '@Url.Action("CargarPresentaciones", "Consultas", new { area = "" })';
+        var parametros = { idProducto: idProducto };
+        var presentaciones = JOERP.Ajax(url, parametros, false);
+
+        var html = "";
+        $(presentaciones).each(function (index, presentacion) {
+            html = html + "<option value=" + presentacion.IdPresentacion + ">" + presentacion.Nombre + "</option> ";
+        });
+        $("#cboPresentacion").html(html);
+    }
+
+</script>

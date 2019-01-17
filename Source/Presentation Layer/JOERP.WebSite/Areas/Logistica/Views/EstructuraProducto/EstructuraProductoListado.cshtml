@@ -1,0 +1,179 @@
+﻿@using JOERP.Helpers
+@{
+    ViewBag.Title = "Estructura del Producto";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<input id="hfIdentificador" type="hidden" /><br />
+<div id="listado" style="padding: 10px; height: 90%; min-height: 400px;">
+    <table style="width: 100%;">
+        <tbody>
+            <tr>
+                <td style="vertical-align: top; width: 200px;">
+                    
+                    <fieldset class="fieldset-with-legend border-round">
+                        <legend class="border-shadow">Estructura del producto : </legend>
+                        <div id="mainTree" style="padding: 10px 10px 10px 10px;">
+                        </div>
+                    </fieldset>
+                </td>
+                <td style="vertical-align: top">
+                    <div id="mostrarTree" style="padding-left: 20px;">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="detalleTree" style="padding-left: 20px;">
+    </div>
+</div>
+<div id="informacion" style="padding: 10px; display: none;">
+</div>
+<div id='dialog-alert' style="display: none">
+</div>
+<script type='text/javascript'>
+
+    $(document).ready(function () {
+
+        ListarT();
+        DisableButtons(true);
+
+        $("#dialog-confirm").dialog({
+
+            autoOpen: false,
+            resizable: false,
+            height: 150,
+            modal: true,
+            buttons: {
+                "Eliminar": function () {
+                    var id = $("#mainTree").jstree('get_selected').attr('id');
+
+                    $.ajax({
+                        url: "/Logistica/EstructuraProducto/Eliminar?id=" + id
+                    });
+
+                    $('#detalleTree').dialog("close");
+                    var tree = jQuery.jstree._reference("#mainTree");
+                    tree.refresh();
+                    document.getElementById("mostrarTree").style.display = 'none';
+                    $(this).dialog("close");
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $('#detalleTree').dialog({
+            autoOpen: false,
+            width: 500,
+            resizable: false,
+            modal: true,
+            closeOnEscape: false,
+            open: function (event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+        });
+
+        $("#mainTree").click(function () {
+            debugger;
+            DisableButtons(false);
+            
+            document.getElementById("mostrarTree").style.display = 'block';
+            var id = $("#mainTree").jstree('get_selected').attr('id');
+            var idModulo = $("#mainTree").jstree('get_selected').attr('rel');
+            if (idModulo != "0" && id != "0") {
+                $.ajax({
+                    url: '@Url.Action("Mostrar", "EstructuraProducto", new { area = "Logistica" })' + '?id=' + id,
+
+                    success: function (data) {
+                        $("#mostrarTree").html(data);
+                    }
+                });
+            } else {
+                document.getElementById("mostrarTree").style.display = 'none';
+            }
+        });
+
+        $("#btnCrear").click(function () {
+
+            var idParent = $("#mainTree").jstree('get_selected').attr('id'); //nodo por id
+            var idModulo = $("#mainTree").jstree('get_selected').attr('rel');
+
+            $("#mainTree").jstree("create", null, false, "Nuevo Formulario", false, true);
+            document.getElementById("mostrarTree").style.display = 'none';
+            //change the title of the dialgo
+            linkObj = $(this);
+            var dialogDiv = $('#detalleTree');
+            var viewUrl = '@Url.Action("Crear", "EstructuraProducto", new { area = "Logistica" })?idParent=' + idParent + '&idModulo=' + idModulo;
+            $.get(viewUrl, function (data) {
+                dialogDiv.html(data);
+                //validation
+                var $form = $("#frmIdFormulario");
+                // Unbind existing validation
+                $form.unbind();
+                dialogDiv.dialog('open');
+            });
+            return false;
+        });
+
+        $("#btnEditar").click(function () {
+
+            document.getElementById("mostrarTree").style.display = 'none';
+            var id = $("#mainTree").jstree('get_selected').attr('id');
+            var idModulo = $("#mainTree").jstree('get_selected').attr('rel');
+            if (id == "0") { id = idModulo; }
+
+            //change the title of the dialgo
+            linkObj = $(this);
+            var dialogDiv = $('#detalleTree');
+            var viewUrl = '@Url.Action("Modificar", "EstructuraProducto", new { area = "Logistica" })' + 'id=' + id;
+            $.get(viewUrl, function (data) {
+                dialogDiv.html(data);
+                //validation
+                var $form = $("#frmIdFormulario");
+                // Unbind existing validation
+                $form.unbind();
+                dialogDiv.dialog('open');
+            });
+            return false;
+        });
+
+        $("#btnEliminar").click(function () {
+            var id = $("#mainTree").jstree('get_selected').attr('id');
+            var idModulo = $("#mainTree").jstree('get_selected').attr('rel');
+            if (idModulo != "0" && id != "0") {
+                $("#dialog-confirm").dialog("open");
+            } else {
+                csscody.alert("Si desea eliminar este nodo debe ir al mantenedor Tablas-Módulos");
+            }
+        });
+    });
+
+    function ListarT() {
+        debugger;
+        $('#mainTree').jstree({
+            "json_data": {
+                "ajax": {
+                    "url": '@Url.Action("GetTreeData", "EstructuraProducto", new { area = "Logistica" })',
+                    "type": "POST",
+                    "dataType": "json",
+                    "contentType": "application/json charset=utf-8"
+                }
+            },
+            "themes": {
+                "theme": "default",
+                "dots": false,
+                "icons": true,
+                "url": "@Utils.AbsoluteWebRoot/Content/treeView/default/style.css"
+            },
+
+            "plugins": ["themes", "json_data", "dnd", "ui", "crrm"]
+        });
+    }
+
+    function DisableButtons(estado) {
+        $('#btnCrear').attr("disabled", estado);
+        $('#btnEditar').attr("disabled", estado);
+        $('#btnEliminar').attr("disabled", estado);
+    }
+
+</script>
